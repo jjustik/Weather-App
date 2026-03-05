@@ -147,17 +147,17 @@ function changeThemeSvg(e) {
 
 function loadTheme() {
     const currentTheme = localStorage.getItem("currentTheme")
-    if(currentTheme === "lightTheme") {
-        currentThemeSvg.className = "light-theme-span";
-        document.body.className = "light-theme";
-    }
-    else if(currentTheme === "darkTheme") {
+    if(currentTheme === "darkTheme") {
         currentThemeSvg.className = "dark-theme-span";
         document.body.className = "dark-theme";
     }
-    else {
+    else if (currentTheme === "blackOrangeTheme") {
         currentThemeSvg.className = "black-orange-theme-span";
         document.body.className = "black-orange-theme";
+    }
+    else {
+        currentThemeSvg.className = "light-theme-span";
+        document.body.className = "light-theme";
     }
 }
 
