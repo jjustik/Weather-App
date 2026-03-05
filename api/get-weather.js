@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "City is required" });
     }
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=ru`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
 
     try {
         const apiResponse = await fetch(url);

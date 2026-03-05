@@ -61,7 +61,7 @@ function cityWeather(id, data) {
         "snow": "snow.jpg"
     };
 
-    const description = data.weather[0].description;
+    const description = data.weather[0].description.toLowerCase();
     const imageName = weatherImages[description];
 
     if (imageName) {
