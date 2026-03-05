@@ -120,10 +120,8 @@ function cityDailyWeather(id, svgIcons, data) {
 // ----------------------------- KHAKRIV -----------------------------
 
 async function fetchWeatherKharkiv() {
-    const url = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=kharkiv";
-
     try {
-        const res = await fetch(`${url}&appid=${apiKey}`);
+        const res = await fetch("/api/get-weather?city=kharkiv");
         const data = await res.json();
 
         cityWeather(1, data)
@@ -195,10 +193,8 @@ async function fetchDailyWatherKharkiv() {
 // ----------------------------- ZABRZE -----------------------------
 
 async function fetchWeatherZabrze() {
-    const url = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=zabrze";
-
     try {
-        const res = await fetch(`${url}&appid=${apiKey}`);
+        const res = await fetch("/api/get-weather?city=zabrze");
         const data = await res.json();
 
         cityWeather(2, data)
@@ -270,10 +266,8 @@ async function fetchDailyWatherZabrze() {
 // ----------------------------- GOTTMADINGEN -----------------------------
 
 async function fetchWeatherGottmadingen() {
-    const url = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=gottmadingen";
-
     try {
-        const res = await fetch(`${url}&appid=${apiKey}`);
+        const res = await fetch("/api/get-weather?city=gottmadingen");
         const data = await res.json();
 
         cityWeather(3, data)
@@ -345,10 +339,8 @@ async function fetchDailyWatherGottmadingen() {
 // ----------------------------- SANDANSKI -----------------------------
 
 async function fetchWeatherSandanski() {
-    const url = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=sandanski";
-
     try {
-        const res = await fetch(`${url}&appid=${apiKey}`);
+        const res = await fetch("/api/get-weather?city=sandanski");
         const data = await res.json();
 
         cityWeather(4, data)
