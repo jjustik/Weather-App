@@ -823,7 +823,7 @@ button.left-arrow {
 }
 
 .profile-main, .login-main {
-    top: 2vh;
+    top: 2svh;
     flex-direction: column;
     align-items: center;
 }
