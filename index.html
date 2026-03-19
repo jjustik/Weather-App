@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Weather App</title>
+    <link rel="icon" href="images/weather-icon.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+    <script src="weather.js" defer></script>
+</head>
+<body class="light-theme">
+    <header>
+        <nav>
+            <ul>
+                <li class="home-li"><a href="index.html">Home</a></li>
+                <div class="theme-change-block">
+                    <ul class="theme-list">
+                        <div class="theme" id="lightTheme"><span class="light-theme-span"></span></div>
+                        <div class="theme" id="darkTheme"><span class="dark-theme-span"></span></div>
+                        <div class="theme" id="blackOrangeTheme"><span class="black-orange-theme-span"></span></div>
+                    </ul>
+                    <li class="theme-li">Theme</li>
+                </div>
+                <li class="theme-li-2">Theme</li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="weather-background">
+            <div class="change-mode">
+                <button class="change-mode-button" id="easy-mode-button">Easy</button>
+                <button class="change-mode-button" id="advanced-mode-button">Advanced</button>
+                <button class="change-mode-button" id="days-mode-button">1-7 Days</button>
+            </div>
+            <div class="search-bar">
+                <input type="search" placeholder="Search for the city">
+            </div>
+            <div class="weather-project">
+                <h1 class="weather-h1" id="h1-1">Kharkiv</h1>
+                <div class="weather" id="weather-1">
+                    <div class="weather-details-1 wd-1">
+                        <p class="current-time current-time-1"></p>
+                        <div class="details">
+                            <div class="temp-rn">
+                                <p class="temp-rn-p temp-rn-p-1"></p>
+                            </div>
+                            <div class="more-info">
+                                <p class="about-rn about-rn-1"></p>
+                                <p class="about-feels about-feels-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-details-2">
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                            <p class="wind-1"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                            <p class="humidity-1"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                            <p class="visibility-1"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                            <p class="pressure-1"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                            <p class="uv-1"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                            <p class="dp-1"></p>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="weather-h1" id="h1-2">Zabrze</h1>
+                <div class="weather" id="weather-2">
+                    <div class="weather-details-1 wd-2">
+                        <p class="current-time current-time-2"></p>
+                        <div class="details">
+                            <div class="temp-rn">
+                                <p class="temp-rn-p temp-rn-p-2"></p>
+                            </div>
+                            <div class="more-info">
+                                <p class="about-rn about-rn-2"></p>
+                                <p class="about-feels about-feels-2"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-details-2">
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                            <p class="wind-2"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                            <p class="humidity-2"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                            <p class="visibility-2"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                            <p class="pressure-2"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                            <p class="uv-2"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                            <p  class="dp-2"></p>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="weather-h1" id="h1-3">Gottmadingen</h1>
+                <div class="weather" id="weather-3">
+                    <div class="weather-details-1 wd-3">
+                        <p class="current-time current-time-3"></p>
+                        <div class="details">
+                            <div class="temp-rn">
+                                <p class="temp-rn-p temp-rn-p-3"></p>
+                            </div>
+                            <div class="more-info">
+                                <p class="about-rn about-rn-3"></p>
+                                <p class="about-feels about-feels-3"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-details-2">
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                            <p class="wind-3"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                            <p class="humidity-3"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                            <p class="visibility-3"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                            <p class="pressure-3"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                            <p class="uv-3"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                            <p class="dp-3"></p>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="weather-h1" id="h1-4">Sandanski</h1>
+                <div class="weather" id="weather-4">
+                    <div class="weather-details-1 wd-4">
+                        <p class="current-time current-time-4"></p>
+                        <div class="details">
+                            <div class="temp-rn">
+                                <p class="temp-rn-p temp-rn-p-4"></p>
+                            </div>
+                            <div class="more-info">
+                                <p class="about-rn about-rn-4"></p>
+                                <p class="about-feels about-feels-4"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-details-2">
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                            <p class="wind-4"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                            <p class="humidity-4"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                            <p class="visibility-4"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                            <p class="pressure-4"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                            <p class="uv-4"></p>
+                        </div>
+                        <div class="details-2-more">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                            <p class="dp-4"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="weather-project-2">
+                <div class="full-weather-container">
+                    <h1 class="weather-h1">Kharkiv</h1>
+                    <div class="weather-container">
+                        <div class="weather">
+                            <div class="weather-details-1 wd-1">
+                                <p class="current-time current-time-1"></p>
+                                <div class="details">
+                                    <div class="temp-rn">
+                                        <p class="temp-rn-p temp-rn-p-1"></p>
+                                    </div>
+                                    <div class="more-info">
+                                        <p class="about-rn about-rn-1"></p>
+                                        <p class="about-feels about-feels-1"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="weather-details-2">
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                                    <p class="wind-1"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                                    <p class="humidity-1"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                                    <p class="visibility-1"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                                    <p class="pressure-1"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                                    <p class="uv-1"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                                    <p class="dp-1"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="weather-2">
+                            <h3>Hourly forecast</h3>
+                            <div class="weather-img-container">
+                                <img class="weather-img" src="images/Misha-cat2.jpg">
+                            </div>
+                            <div class="hourly-weather-container">
+                                <div class="hourly-weather hour-1-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-2-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-3-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-4-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-5-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-6-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-7-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-8-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-9-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-10-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-11-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-12-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-13-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-14-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-15-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-16-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-17-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-18-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-19-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-20-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-21-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-22-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-23-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-24-1">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="full-weather-container">
+                    <h1 class="weather-h1">Zabrze</h1>
+                    <div class="weather-container">
+                        <div class="weather">
+                            <div class="weather-details-1 wd-2">
+                                <p class="current-time current-time-2"></p>
+                                <div class="details">
+                                    <div class="temp-rn">
+                                        <p class="temp-rn-p temp-rn-p-2"></p>
+                                    </div>
+                                    <div class="more-info">
+                                        <p class="about-rn about-rn-2"></p>
+                                        <p class="about-feels about-feels-2"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="weather-details-2">
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                                    <p class="wind-2"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                                    <p class="humidity-2"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                                    <p class="visibility-2"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                                    <p class="pressure-2"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                                    <p class="uv-2"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                                    <p class="dp-2"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="weather-2">
+                            <h3>Hourly forecast</h3>
+                            <div class="weather-img-container">
+                                <img class="weather-img" src="images/Misha-cat2.jpg">
+                            </div>
+                            <div class="hourly-weather-container">
+                                <div class="hourly-weather hour-1-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-2-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-3-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-4-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-5-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-6-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-7-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-8-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-9-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-10-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-11-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-12-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-13-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-14-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-15-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-16-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-17-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-18-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-19-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-20-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-21-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-22-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-23-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-24-2">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="full-weather-container">
+                    <h1 class="weather-h1">Gottmadingen</h1>
+                    <div class="weather-container">
+                        <div class="weather">
+                            <div class="weather-details-1 wd-3">
+                                <p class="current-time current-time-3"></p>
+                                <div class="details">
+                                    <div class="temp-rn">
+                                        <p class="temp-rn-p temp-rn-p-3"></p>
+                                    </div>
+                                    <div class="more-info">
+                                        <p class="about-rn about-rn-3"></p>
+                                        <p class="about-feels about-feels-3"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="weather-details-2">
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                                    <p class="wind-3"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                                    <p class="humidity-3"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                                    <p class="visibility-3"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                                    <p class="pressure-3"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                                    <p class="uv-3"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                                    <p class="dp-3"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="weather-2">
+                            <h3>Hourly forecast</h3>
+                            <div class="weather-img-container">
+                                <img class="weather-img" src="images/Misha-cat2.jpg">
+                            </div>
+                            <div class="hourly-weather-container">
+                                <div class="hourly-weather hour-1-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-2-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-3-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-4-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-5-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-6-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-7-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-8-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-9-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-10-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-11-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-12-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-13-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-14-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-15-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-16-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-17-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-18-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-19-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-20-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-21-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-22-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-23-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-24-3">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="full-weather-container">
+                    <h1 class="weather-h1">Sandanski</h1>
+                    <div class="weather-container">
+                        <div class="weather">
+                            <div class="weather-details-1 wd-4">
+                                <p class="current-time current-time-4"></p>
+                                <div class="details">
+                                    <div class="temp-rn">
+                                        <p class="temp-rn-p temp-rn-p-4"></p>
+                                    </div>
+                                    <div class="more-info">
+                                        <p class="about-rn about-rn-4"></p>
+                                        <p class="about-feels about-feels-4"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="weather-details-2">
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                                    <p class="wind-4"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                                    <p class="humidity-4"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                                    <p class="visibility-4"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                                    <p class="pressure-4"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                                    <p class="uv-4"></p>
+                                </div>
+                                <div class="details-2-more">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                                    <p class="dp-4"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="weather-2">
+                            <h3>Hourly forecast</h3>
+                            <div class="weather-img-container">
+                                <img class="weather-img" src="images/Misha-cat2.jpg">
+                            </div>
+                            <div class="hourly-weather-container">
+                                <div class="hourly-weather hour-1-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-2-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-3-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-4-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-5-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-6-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-7-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-8-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-9-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-10-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-11-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-12-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-13-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-14-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-15-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-16-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-17-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-18-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-19-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-20-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-21-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-22-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-23-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                                <div class="hourly-weather hour-24-4">
+                                    <p class="hour-time"></p>
+                                    <div class="svg-container"></div>
+                                    <p class="chance-of-precipitation"></p>
+                                    <p class="hourly-weather-deg"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="right-arrow" id="w-arrow1"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m560-240-56-58 142-142H160v-80h486L504-662l56-58 240 240-240 240Z"/></svg></button>
+                <button class="left-arrow" id="w-arrow2"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M400-240 160-480l240-240 56 58-142 142h486v80H314l142 142-56 58Z"/></svg></button>
+            </div>
+            <div class="weather-project-3">
+                <div class="kharkiv-8days-weather">
+                    <h2>Kharkiv</h2>
+                    <div class="kharkiv-8days-weather-container">
+                        <div class="kharkiv-8days-weather-container-inner">
+                            <div class="daily-weather day-1-1">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-2-1">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-3-1">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-4-1">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-5-1">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-6-1">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-7-1">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-8-1">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zabrze-8days-weather">
+                    <h2>Zabrze</h2>
+                    <div class="zabrze-8days-weather-container">
+                        <div class="zabrze-8days-weather-container-inner">
+                            <div class="daily-weather day-1-2">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-2-2">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-3-2">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-4-2">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-5-2">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-6-2">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-7-2">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-8-2">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gottmadingen-8days-weather">
+                    <h2>Gottmadingen</h2>
+                    <div class="gottmadingen-8days-weather-container">
+                        <div class="gottmadingen-8days-weather-container-inner">
+                            <div class="daily-weather day-1-3">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-2-3">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-3-3">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-4-3">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-5-3">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-6-3">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-7-3">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-8-3">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sandanski-8days-weather">
+                    <h2>Sandanski</h2>
+                    <div class="sandanski-8days-weather-container">
+                        <div class="sandanski-8days-weather-container-inner">
+                            <div class="daily-weather day-1-4">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-2-4">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-3-4">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-4-4">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-5-4">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-6-4">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-7-4">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                            <div class="daily-weather day-8-4">
+                                <p class="day-of-the-week"></p>
+                                <p class="min-max-temp"></p>
+                                <div class="svg-container-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-selector">
+            <span class="light-theme-span" id="currentTheme"></span><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M480-360 280-559.33h400L480-360Z"/></svg>
+            <ul>
+                <li><span class="light-theme-span"></span></li>
+                <li><span class="dark-theme-span"></span></li>
+                <li><span class="black-orange-theme-span"></span></li>
+            </ul>
+        </div>
+    </main>
+    <footer>
+        <p>Copyright - Justik</p>
+    </footer>
+</body>
+</html>
