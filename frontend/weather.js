@@ -544,6 +544,9 @@ async function searchForCity() {
             lat: city.latitude,
             long: city.longitude
         };
+        console.log(cityInfo)
+        // Cities.unshift(cityInfo.name)
+        // console.log(Cities)
     }
 }
 
@@ -596,7 +599,7 @@ async function fetchWeatherNew() {
             </div>
         </div>`
         weatherProject1.innerHTML = tempWeatherBlock;
-        Cities.unshift(tempWeatherBlock)
+        // Cities.unshift(tempWeatherBlock)
         cityWeather(uniqueId, data)
     } catch(err) {
         console.log(`error ${err}`)
