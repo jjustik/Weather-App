@@ -210,3 +210,4 @@ __marimo__/
 # Игнорируем настройки редактора
 .vscode/
 >>>>>>> fa15e5d (initial commit)
+.vercel
