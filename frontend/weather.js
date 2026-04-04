@@ -545,6 +545,7 @@ async function searchForCity() {
             long: city.longitude
         };
         console.log(cityInfo)
+        fetchWeatherNew()
         // Cities.unshift(cityInfo.name)
         // console.log(Cities)
     }
@@ -557,7 +558,7 @@ async function fetchWeatherNew() {
 
         const uniqueId = Math.random().toString(36).substring(2, 9)
         const tempWeatherBlock = `
-        <h1 class="weather-h1" id="h1-1">Kharkiv</h1>
+        <h1 class="weather-h1" id="h1-1">${cityInfo.name}</h1>
         <div class="weather" id="weather-1">
             <div class="weather-details-1 wd-1">
                 <p class="current-time current-time-1"></p>
