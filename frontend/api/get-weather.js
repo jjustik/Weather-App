@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-    const { city } = req.query; 
+    const { city } = req.query;
     const API_KEY = process.env.MY_SECRET_KEY; 
 
     // Если город не передан, сразу выдаем ошибку
