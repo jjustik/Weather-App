@@ -793,6 +793,8 @@ button.left-arrow {
 
 .weather-project {
     display: grid;
+    position: relative;
+    top: 1.5em;
     gap: 0 2em;
 }
 
@@ -812,9 +814,11 @@ button.left-arrow {
     width: 16em;
 }
 
-.weather-project > .weather-h1 {
-    top: -0.3em;
-    position: relative;
+.weather > .weather-h1 {
+    top: -1.75em;
+    right: 50%;
+    transform: translateX(50%);
+    position: absolute;
 }
 
 .change-mode-button {
@@ -942,25 +946,25 @@ button.left-arrow {
     .weather-project > .weather {
         height: 15em;
     }
-    #weather-1, #h1-1 {
+    .weather:nth-child(1), .weather > .weather-h1:nth-child(1) {
         grid-column-start: 1;
         grid-row-start: 1;
     }
-    #weather-2, #h1-2 {
+    .weather:nth-child(2), .weather > .weather-h1:nth-child(2) {
         grid-column-start: 1;
         grid-row-start: 2;
     }
-    #weather-3, #h1-3 {
+    .weather:nth-child(3), .weather > .weather-h1:nth-child(3) {
         grid-column-start: 2;
         grid-row-start: 1;
     }
-    #weather-4, #h1-4 {
+    .weather:nth-child(4), .weather > .weather-h1:nth-child(4) {
         grid-column-start: 2;
         grid-row-start: 2;
     }
-    .weather-h1 {
+    .weather > .weather-h1 {
         font-size: 1.5em;
-        margin-top: -1.3em;
+        margin-top: -0.4em;
     }
     .weather-project > .weather > .weather-details-2 > .details-2-more {
         height: 2.4em;
@@ -1042,19 +1046,19 @@ button.left-arrow {
     .weather-project > .weather {
         height: 22.3em;
     }
-    #weather-1, #h1-1 {
+    .weather:nth-child(1), .weather > .weather-h1:nth-child(1) {
         grid-column-start: 1;
         grid-row-start: 1;
     }
-    #weather-2, #h1-2 {
+    .weather:nth-child(2), .weather > .weather-h1:nth-child(2) {
         grid-column-start: 1;
         grid-row-start: 2;
     }
-    #weather-3, #h1-3 {
+    .weather:nth-child(3), .weather > .weather-h1:nth-child(3) {
         grid-column-start: 1;
         grid-row-start: 3;
     }
-    #weather-4, #h1-4 {
+    .weather:nth-child(4), .weather > .weather-h1:nth-child(4) {
         grid-column-start: 1;
         grid-row-start: 4;
     }
