@@ -488,26 +488,65 @@ nav a {
     align-items: center;
 }
 
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    border-radius: 50%;
+    padding: 0.1em;
+    outline: 0;
+    top: -0.9em;
+    right: -0.9em;
+    z-index: 1;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}
+
+.btn svg {
+    width: 2em;
+    height: 2em;
+    background-color: white;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.remove-svg {
+    fill: red;
+}
+
 @property --angle {
     syntax: "<angle>";
     initial-value: 0deg;
     inherits: false;
 }
 
-.weather::after, .weather::before {
+.weather::after, .weather::before, .btn::after, .btn::before {
     --angle: 0deg;
     content: "";
     position: absolute;
     height: 100%;
     width: 100%;
-    background: conic-gradient(from var(--angle), black, var(--primary-color), black, var(--primary-color), black);
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-    z-index: -1;
+    z-index: -2;
     border-radius: 1em;
-    padding: 4px;
     animation: 3s spin linear infinite;
+}
+
+.weather::after, .weather::before {
+    background: conic-gradient(from var(--angle), black, var(--primary-color), black, var(--primary-color), black);
+    padding: 4px;
+    z-index: -1;
+}
+
+.btn::after, .btn::before {
+    background: conic-gradient(from var(--angle), rgb(14, 0, 76), var(--primary-color), rgb(14, 0, 76), var(--primary-color), rgb(14, 0, 76));
+    padding: 1px;
+    z-index: 1;
 }
 
 @keyframes spin {

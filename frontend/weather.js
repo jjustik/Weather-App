@@ -410,6 +410,7 @@ let Cities = [];
 let timeout = null;
 let uniqueId;
 let cityInfo;
+let btn;
 const searchInput = document.querySelector(".search-bar > input")
 const weatherProject1 = document.querySelector(".weather-project")
 
@@ -494,6 +495,7 @@ async function fetchWeatherNew() {
         const tempWeatherBlock = `
         <div class="weather" id="weather-${uniqueId}">
             <h1 class="weather-h1 h1-${uniqueId}"></h1>
+            <button class="btn add-btn" id="btn-${uniqueId}"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z"/></svg></button>
             <div class="weather-details-1 wd-${uniqueId}">
                 <p class="current-time current-time-${uniqueId}"></p>
                 <div class="details">
@@ -534,32 +536,96 @@ async function fetchWeatherNew() {
             </div>
         </div>`
         weatherProject1.innerHTML = tempWeatherBlock;
-        // Cities.unshift(tempWeatherBlock)
         cityWeather(uniqueId, data, data2);
+        btn = document.getElementById(`btn-${uniqueId}`);
+        btn?.addEventListener("click", addRemoveCity)
     } catch(err) {
         console.log(`error ${err}`)
     }
 }
 
-async function fetchWeatherNewDpandUv() {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${cityInfo.lat}&longitude=${cityInfo.long}&current_weather=true&hourly=dewpoint_2m,uv_index&timezone=auto`;
+function addRemoveCity() {
+    console.log(btn)
+    if (!Cities.includes(cityInfo.name) && Cities.length < 4) {
+        Cities.unshift(cityInfo.name)
+        btn.innerHTML = `<svg class="remove-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M200-446.67v-66.66h560v66.66H200Z"/></svg>`
+        console.log(Cities)
+        renderCitiesWeather()
+    }
+}
 
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-    
-        const h = data.hourly;
-        const dewpoint = Math.round(h.dewpoint_2m[0]);
-        const uvIndex  = Math.round(h.uv_index[0]);
+async function renderCitiesWeather() {
+    weatherProject1.innerHTML = "";
+    for(const cityfr of Cities) {
+        try {
+            const url = `https://geocoding-api.open-meteo.com/v1/search?name=${cityfr}&count=1&format=json`
+            const res = await fetch(`/api/get-weather?city=${cityfr}`);
+            const res2 = await fetch(url)
+            const data = await res.json();
+            const data2 = await res2.json();
+            const cityinf = data2.results[0];
+            let cityInfo = {
+                lat: cityinf.latitude,
+                long: cityinf.longitude
+            };
+            const res3 = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${cityInfo.lat}&longitude=${cityInfo.long}&current_weather=true&hourly=dewpoint_2m,uv_index&timezone=auto`);
+            const data3 = await res3.json()
 
-        document.querySelectorAll(`.uv-${uniqueId}`).forEach((uvOne)=> {
-            uvOne.textContent = uvIndex+" UV"
-        })
-        document.querySelectorAll(`.dp-${uniqueId}`).forEach((dpOne)=> {
-            dpOne.textContent = dewpoint+" °C"
-        })
-    } catch (err) {
-        console.error("Ошибка при получении данных:", err);
+
+            let uniqueId = Math.random().toString(36).substring(2, 9)
+            let tempWeatherBlock = document.createElement("div");
+            tempWeatherBlock.className = "weather";
+            tempWeatherBlock.id = `weather-${uniqueId}`
+            tempWeatherBlock.innerHTML = `
+                <h1 class="weather-h1 h1-${uniqueId}"></h1>
+                <button class="btn add-btn" id="btn-${uniqueId}"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z"/></svg></button>
+                <div class="weather-details-1 wd-${uniqueId}">
+                    <p class="current-time current-time-${uniqueId}"></p>
+                    <div class="details">
+                        <div class="temp-rn">
+                            <p class="temp-rn-p temp-rn-p-${uniqueId}"></p>
+                        </div>
+                        <div class="more-info">
+                            <p class="about-rn about-rn-${uniqueId}"></p>
+                            <p class="about-feels about-feels-${uniqueId}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="weather-details-2">
+                    <div class="details-2-more">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M460-160q-50 0-85-35t-35-85h80q0 17 11.5 28.5T460-240q17 0 28.5-11.5T500-280q0-17-11.5-28.5T460-320H80v-80h380q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-560v-80h540q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43h-80q0-59 40.5-99.5T620-840q59 0 99.5 40.5T760-700q0 59-40.5 99.5T620-560H80Zm660 320v-80q26 0 43-17t17-43q0-26-17-43t-43-17H80v-80h660q59 0 99.5 40.5T880-380q0 59-40.5 99.5T740-240Z"/></svg> Wind</span>
+                        <p class="wind-${uniqueId}"></p>
+                    </div>
+                    <div class="details-2-more">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Humidity</span>
+                        <p class="humidity-${uniqueId}"></p>
+                    </div>
+                    <div class="details-2-more">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z"/></svg> Visibility</span>
+                        <p class="visibility-${uniqueId}"></p>
+                    </div>
+                    <div class="details-2-more">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-400v-80h640v80H160Zm0-120v-80h640v80H160ZM440-80v-128l-64 64-56-56 160-160 160 160-56 56-64-62v126h-80Zm40-560L320-800l56-56 64 64v-128h80v128l64-64 56 56-160 160Z"/></svg> Pressure</span>
+                        <p class="pressure-${uniqueId}"></p>
+                    </div>
+                    <div class="details-2-more">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm98 382q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283.5-56.5Q640-413 640-480t-46.5-113.5Q547-640 480-640t-113.5 46.5Q320-547 320-480t46.5 113.5Q413-320 480-320t113.5-46.5ZM480-480Z"/></svg> UV Index</span>
+                        <p class="uv-${uniqueId}"></p>
+                    </div>
+                    <div class="details-2-more">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M480-100q-133 0-226.5-92T160-416q0-63 24.5-120.5T254-638l226-222 226 222q45 44 69.5 101.5T800-416q0 132-93.5 224T480-100Zm170-148.5Q720-317 720-416q0-47-18-89.5T650-580L480-748 310-580q-34 32-52 74.5T240-416q0 99 70 167.5T480-180q100 0 170-68.5Z"/></svg> Dew Point</span>
+                        <p class="dp-${uniqueId}"></p>
+                    </div>
+                </div>
+            </div>`
+        // weatherProject1.innerHTML = tempWeatherBlock;
+        weatherProject1.append(tempWeatherBlock)
+        cityWeather(uniqueId, data, data3);
+        btn = document.getElementById(`btn-${uniqueId}`);
+        btn?.addEventListener("click", addRemoveCity)
+    } catch(err) {
+        console.log(`error ${err}`)
+    }
     }
 }
 
@@ -603,21 +669,21 @@ async function fetchDailyWatherKharkiv() {
 
 
 document.addEventListener("DOMContentLoaded", ()=> {
-    fetchWeatherKharkiv();
-    fetchHourlyWatherKharkiv();
-    fetchDailyWatherKharkiv();
+    // fetchWeatherKharkiv();
+    // fetchHourlyWatherKharkiv();
+    // fetchDailyWatherKharkiv();
 
-    fetchWeatherZabrze();
-    fetchHourlyWatherZabrze();
-    fetchDailyWatherZabrze();
+    // fetchWeatherZabrze();
+    // fetchHourlyWatherZabrze();
+    // fetchDailyWatherZabrze();
 
-    fetchWeatherGottmadingen();
-    fetchHourlyWatherGottmadingen();
-    fetchDailyWatherGottmadingen();
+    // fetchWeatherGottmadingen();
+    // fetchHourlyWatherGottmadingen();
+    // fetchDailyWatherGottmadingen();
 
-    fetchWeatherSandanski();
-    fetchHourlyWatherSandanski();
-    fetchDailyWatherSandanski();
+    // fetchWeatherSandanski();
+    // fetchHourlyWatherSandanski();
+    // fetchDailyWatherSandanski();
 
     searchInput.addEventListener("input", ()=> {
         clearTimeout(timeout)
