@@ -480,12 +480,16 @@ nav a {
     grid-row: 2;
     height: 22.3em;
     padding: 0.8em;
-    display: grid;
+    display: none;
     gap: 0.2em;
     grid-template-rows: 63% 37%;
     background: var(--container-color);
     border-radius: 1em;
     align-items: center;
+}
+
+.grid {
+    display: grid;
 }
 
 .btn {
