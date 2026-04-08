@@ -514,21 +514,21 @@ async function fetchWeatherNew() {
 function addRemoveCity(e) {
     const cityName = e.currentTarget.dataset.cityName || cityInfo.name;
     const number = e.currentTarget.dataset.number;
+    console.log(number)
     let btn1 = document.getElementById(`btn-${number}`);
-    console.log(`btn ${btn1}`)
+    console.log(btn1)
     if (!Cities.includes(cityName) && Cities.length < 4) {
         Cities.push(cityInfo.name)
         btn.innerHTML = `<svg class="remove-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M200-446.67v-66.66h560v66.66H200Z"/></svg>`
         saveCities();
+        getIndexForButtons();
         renderCitiesWeather();
     }
     else if(Cities.includes(cityName)) {
         let indexOfRemovedCity = Cities.indexOf(cityName)
-        const weatherBlock = document.getElementById(`weather-${indexOfRemovedCity+1}`);
-        console.log(indexOfRemovedCity+1)
         Cities = Cities.filter(city => city !== cityName);
-        if (weatherBlock && indexOfRemovedCity !== -1) {
-            weatherBlock.classList.remove("grid")
+        if (indexOfRemovedCity !== -1) {
+            btn1.parentElement.classList.remove("grid")
             console.log(Cities)
         }
         saveCities();
@@ -558,7 +558,7 @@ async function renderCitiesWeather() {
 
                 const currentBtn = document.getElementById(`btn-${index+1}`)
                 currentBtn.dataset.cityName = cityfr;
-                currentBtn.dataset.number = index+1;
+                // currentBtn.dataset.number = index+1;
                 currentBtn.removeEventListener("click", addRemoveCity);
                 currentBtn.addEventListener("click", addRemoveCity);
             } catch(err) {
@@ -567,6 +567,13 @@ async function renderCitiesWeather() {
         })();
     }
     console.log(Cities)
+}
+
+function getIndexForButtons() {
+    Cities.forEach((_, index) => {
+        const currentBtn = document.getElementById(`btn-${index+1}`)
+        currentBtn.dataset.number = index+1;
+    })
 }
 
 function saveCities() {
@@ -620,6 +627,7 @@ async function fetchDailyWatherKharkiv() {
 
 document.addEventListener("DOMContentLoaded", ()=> {
     loadCities();
+    getIndexForButtons();
     renderCitiesWeather();
     // fetchWeatherKharkiv();
     // fetchHourlyWatherKharkiv();
