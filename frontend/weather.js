@@ -505,7 +505,6 @@ async function fetchWeatherNew() {
             btn = document.getElementById(`btn-${Cities.length+1}`);
             btn?.addEventListener("click", addRemoveCity)
         }
-        console.log(Cities)
     } catch(err) {
         console.log(`error ${err}`)
     }
@@ -514,9 +513,7 @@ async function fetchWeatherNew() {
 function addRemoveCity(e) {
     const cityName = e.currentTarget.dataset.cityName || cityInfo.name;
     const number = e.currentTarget.dataset.number;
-    console.log(number)
     let btn1 = document.getElementById(`btn-${number}`);
-    console.log(btn1)
     if (!Cities.includes(cityName) && Cities.length < 4) {
         Cities.push(cityInfo.name)
         btn.innerHTML = `<svg class="remove-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M200-446.67v-66.66h560v66.66H200Z"/></svg>`
@@ -529,6 +526,7 @@ function addRemoveCity(e) {
         Cities = Cities.filter(city => city !== cityName);
         if (indexOfRemovedCity !== -1) {
             btn1.parentElement.classList.remove("grid")
+            btn1.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z"/></svg>`
             console.log(Cities)
         }
         saveCities();
@@ -541,6 +539,8 @@ async function renderCitiesWeather() {
             try {
                 const weatherBlock = document.getElementById(`weather-${index+1}`);
                 weatherBlock.classList.add("grid")
+                const currentBtn = document.getElementById(`btn-${index+1}`)
+                currentBtn.innerHTML = `<svg class="remove-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M200-446.67v-66.66h560v66.66H200Z"/></svg>`
                 const url = `https://geocoding-api.open-meteo.com/v1/search?name=${cityfr}&count=1&format=json`
                 const res = await fetch(`/api/get-weather?city=${cityfr}`);
                 const res2 = await fetch(url)
@@ -556,7 +556,6 @@ async function renderCitiesWeather() {
     
                 cityWeather(index+1, data, data3);
 
-                const currentBtn = document.getElementById(`btn-${index+1}`)
                 currentBtn.dataset.cityName = cityfr;
                 // currentBtn.dataset.number = index+1;
                 currentBtn.removeEventListener("click", addRemoveCity);
