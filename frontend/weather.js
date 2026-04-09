@@ -517,6 +517,7 @@ function addRemoveCity(e) {
     if (!Cities.includes(cityName) && Cities.length < 4) {
         Cities.push(cityInfo.name)
         btn.innerHTML = `<svg class="remove-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M200-446.67v-66.66h560v66.66H200Z"/></svg>`
+        btn.parentElement.classList.add("opacity");
         saveCities();
         getIndexForButtons();
         renderCitiesWeather();
@@ -526,6 +527,7 @@ function addRemoveCity(e) {
         Cities = Cities.filter(city => city !== cityName);
         if (indexOfRemovedCity !== -1) {
             btn1.parentElement.classList.remove("grid")
+            btn1.parentElement.classList.remove("opacity");
             btn1.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z"/></svg>`
             console.log(Cities)
         }
@@ -539,6 +541,7 @@ async function renderCitiesWeather() {
             try {
                 const weatherBlock = document.getElementById(`weather-${index+1}`);
                 weatherBlock.classList.add("grid")
+                weatherBlock.classList.add("opacity")
                 const currentBtn = document.getElementById(`btn-${index+1}`)
                 currentBtn.innerHTML = `<svg class="remove-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M200-446.67v-66.66h560v66.66H200Z"/></svg>`
                 const url = `https://geocoding-api.open-meteo.com/v1/search?name=${cityfr}&count=1&format=json`

@@ -4,6 +4,7 @@
     --bg-color: rgb(0, 0, 43);
     --primary-color: rgb(0, 121, 182);
     --accent-color: rgb(0, 80, 119);
+    --accent-color-2: rgb(0, 80, 119);
     --text-color: rgb(234, 234, 234);
     --basic-font: Poppins, "Segoe Ui", sans-serif;
     --container-color: #fff;
@@ -28,6 +29,7 @@
     --bg-color: rgb(0, 0, 43);
     --primary-color: rgb(0, 121, 182);
     --accent-color: rgb(0, 80, 119);
+    --accent-color-2: rgb(0, 80, 119);
     --text-color: rgb(234, 234, 234);
     --basic-font: Poppins, "Segoe Ui", sans-serif;
     --container-color: #fff;
@@ -52,6 +54,7 @@
     --bg-color: rgb(0, 0, 0);
     --primary-color: rgb(59, 61, 62);
     --accent-color: rgb(44, 44, 44);
+    --accent-color-2: rgb(27, 27, 27);
     --text-color: rgb(27, 27, 27);
     --basic-font: Poppins, "Segoe Ui", sans-serif;
     --container-color: #2c2c2c;
@@ -76,6 +79,7 @@
     --bg-color: rgb(0, 0, 0);
     --primary-color: rgb(153, 69, 0);
     --accent-color: rgb(111, 50, 0);
+    --accent-color-2: rgb(111, 50, 0);
     --text-color: rgb(27, 27, 27);
     --basic-font: Poppins, "Segoe Ui", sans-serif;
     --container-color: #2c2c2c;
@@ -481,6 +485,8 @@ nav a {
     height: 22.3em;
     padding: 0.8em;
     display: none;
+    outline: 4px solid var(--accent-color-2);
+    opacity: 0.8;
     gap: 0.2em;
     grid-template-rows: 63% 37%;
     background: var(--container-color);
@@ -490,6 +496,11 @@ nav a {
 
 .grid {
     display: grid;
+}
+
+.opacity {
+    opacity: 1;
+    outline: 0;
 }
 
 .btn {
@@ -527,7 +538,7 @@ nav a {
     inherits: false;
 }
 
-.weather::after, .weather::before, .btn::after, .btn::before {
+.opacity::after, .opacity::before, .btn::after, .btn::before {
     --angle: 0deg;
     content: "";
     position: absolute;
@@ -540,6 +551,7 @@ nav a {
     border-radius: 1em;
     animation: 3s spin linear infinite;
 }
+
 
 .weather::after, .weather::before {
     background: conic-gradient(from var(--angle), black, var(--primary-color), black, var(--primary-color), black);
