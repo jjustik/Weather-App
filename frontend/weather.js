@@ -411,6 +411,9 @@ let timeout = null;
 let uniqueId;
 let cityInfo;
 let btn;
+let btnTrigger;
+let deletion;
+let deletedIndex;
 const searchInput = document.querySelector(".search-bar > input")
 const weatherProject1 = document.querySelector(".weather-project")
 
@@ -499,11 +502,20 @@ async function fetchWeatherNew() {
             btn?.addEventListener("click", addRemoveCity)
         }
         else if (Cities.length > 0) {
-            cityWeather(Cities.length+1, data, data2);
-            const weatherBlock = document.getElementById(`weather-${Cities.length+1}`);
-            weatherBlock.classList.add("grid")
-            btn = document.getElementById(`btn-${Cities.length+1}`);
-            btn?.addEventListener("click", addRemoveCity)
+            const index = Cities.length+1;
+            if(deletion) {
+                cityWeather(deletedIndex+1, data, data2);
+                btnTrigger.parentElement.classList.add("grid")
+                btnTrigger?.addEventListener("click", addRemoveCity)
+                btn = btnTrigger;
+            }
+            else {
+                cityWeather(index, data, data2);
+                const weatherBlock = document.getElementById(`weather-${index}`);
+                weatherBlock.classList.add("grid")
+                btn = document.getElementById(`btn-${index}`);
+                btn?.addEventListener("click", addRemoveCity)
+            }
         }
     } catch(err) {
         console.log(`error ${err}`)
@@ -515,7 +527,8 @@ function addRemoveCity(e) {
     const number = e.currentTarget.dataset.number;
     let btn1 = document.getElementById(`btn-${number}`);
     if (!Cities.includes(cityName) && Cities.length < 4) {
-        Cities.push(cityInfo.name)
+        deletion ? Cities.splice(deletedIndex, 0, cityInfo.name) : Cities.push(cityInfo.name);
+        deletion = false;
         btn.innerHTML = `<svg class="remove-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M200-446.67v-66.66h560v66.66H200Z"/></svg>`
         btn.parentElement.classList.add("opacity");
         saveCities();
@@ -528,6 +541,9 @@ function addRemoveCity(e) {
         if (indexOfRemovedCity !== -1) {
             btn1.parentElement.classList.remove("grid")
             btn1.parentElement.classList.remove("opacity");
+            btnTrigger = btn1;
+            deletedIndex = number-1;
+            deletion = true;
             btn1.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z"/></svg>`
             console.log(Cities)
         }
