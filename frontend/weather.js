@@ -70,6 +70,56 @@ function cityWeather(id, data, data2) {
         "broken clouds": "broken_clouds.jpg",
         "overcast clouds": "overcast_clouds.jpg",
         "light rain": "light_rain.jpg",
+        "heavy intensity rain": "light_rain.jpg",
+        "few clouds": "few_clouds.jpg",
+        "light snow": "snow.jpg",
+        "snow": "snow.jpg"
+    };
+
+    const description = data.weather[0].description.toLowerCase();
+    const imageName = weatherImages[description];
+
+    if (imageName) {
+        weatherInfo.wd.forEach((el) => {
+            el.style.backgroundImage = `url("images/${imageName}")`;
+        });
+    }
+
+    setInterval(() => {
+        updateTime(id, data);
+    }, 60000);
+}
+
+function buttonCityWeather(id, data, data2) {
+
+    updateTime(id, data);
+
+    const weatherInfo = {tempRn: document.querySelectorAll(`.temp-rn-p-${id}`), aboutRn: document.querySelectorAll(`.about-rn-${id}`), aboutFeels: document.querySelectorAll(`.about-feels-${id}`), wind: document.querySelectorAll(`.wind-${id}`), humidity: document.querySelectorAll(`.humidity-${id}`), visibility: document.querySelectorAll(`.visibility-${id}`), pressure: document.querySelectorAll(`.pressure-${id}`), wd: document.querySelectorAll(`.wd-${id}`), uv: document.querySelectorAll(`.uv-${id}`), dp: document.querySelectorAll(`.dp-${id}`)};
+
+    weatherInfo.tempRn.forEach((el)=> el.textContent = Math.round(data.main.temp)+"°")
+    weatherInfo.aboutRn.forEach((el)=> el.textContent = data.weather[0].description.replace(/\b\w/g, c => c.toUpperCase()))
+    weatherInfo.aboutFeels.forEach((el)=> el.textContent = "feels like "+Math.round(data.main.feels_like)+"°")
+    weatherInfo.wind.forEach((el)=> {
+        const speed = Math.round(data.wind.speed);
+        const direction = getWindDirection(data.wind.deg);
+        const windText = `${speed} m/s ${direction}`;
+        el.textContent = windText;
+    })
+    weatherInfo.humidity.forEach((el)=> el.textContent = data.main.humidity+"%")
+    weatherInfo.visibility.forEach((el)=> el.textContent = Math.round(data.visibility / 1000)+"km")
+    weatherInfo.pressure.forEach((el)=> el.textContent = data.main.pressure +" hPa")
+    const h = data2.hourly;
+    const dewpoint = Math.round(h.dewpoint_2m[0]);
+    const uvIndex  = Math.round(h.uv_index[0]);
+    weatherInfo.uv.forEach((el)=> el.textContent = uvIndex+" UV")
+    weatherInfo.dp.forEach((el)=> el.textContent = dewpoint+" °C")
+    const weatherImages = {
+        "clear sky": "clear_sky.jpg",
+        "scattered clouds": "scattered_clouds.jpg",
+        "broken clouds": "broken_clouds.jpg",
+        "overcast clouds": "overcast_clouds.jpg",
+        "light rain": "light_rain.jpg",
+        "heavy intensity rain": "light_rain.jpg",
         "few clouds": "few_clouds.jpg",
         "light snow": "snow.jpg",
         "snow": "snow.jpg"
@@ -95,7 +145,7 @@ function clearCityWeather(id) {
 
     const weatherInfo = {name: document.querySelectorAll(`.h1-${id}`), tempRn: document.querySelectorAll(`.temp-rn-p-${id}`), aboutRn: document.querySelectorAll(`.about-rn-${id}`), aboutFeels: document.querySelectorAll(`.about-feels-${id}`), wind: document.querySelectorAll(`.wind-${id}`), humidity: document.querySelectorAll(`.humidity-${id}`), visibility: document.querySelectorAll(`.visibility-${id}`), pressure: document.querySelectorAll(`.pressure-${id}`), wd: document.querySelectorAll(`.wd-${id}`), uv: document.querySelectorAll(`.uv-${id}`), dp: document.querySelectorAll(`.dp-${id}`)};
 
-    weatherInfo.name.forEach((el)=> el.textContent = "")
+    weatherInfo.name?.forEach((el)=> el.textContent = "")
     weatherInfo.tempRn.forEach((el)=> el.textContent = "")
     weatherInfo.aboutRn.forEach((el)=> el.textContent = "")
     weatherInfo.aboutFeels.forEach((el)=> el.textContent = "")
@@ -111,6 +161,14 @@ function clearCityWeather(id) {
     weatherInfo.wd.forEach((el) => {
         el.style.backgroundImage = ``;
     });
+}
+
+function buttonWeatherH1(id) {
+    document.querySelectorAll(`.h1-${id}`).forEach((el) => el.innerHTML = `<form id="form-${id}"><input class="button-h1" id="input-${id}" type="text"></form>`);
+}
+
+function buttonWeatherAntiH1(id, cityNameButton) {
+    document.querySelectorAll(`.h1-${id}`).forEach((el) => el.textContent = cityNameButton);
 }
 
 function cityHourlyWeather(id, svgIcons, data) {
@@ -445,7 +503,11 @@ let cityInfo;
 let btn;
 let btnTrigger;
 let deletion;
+let deletion1;
+let deletion2;
+let deletion3;
 let deletedIndex;
+let nameOfTheCityFromButton;
 let search = false;
 const searchInput = document.querySelector(".search-bar > input")
 const weatherProject1 = document.querySelector(".weather-project")
@@ -540,29 +602,33 @@ function renderAddButton() {
 
 function buttonFetchWeatherNew() {
     if (Cities.length < 1) {
-        // cityWeather(1, data, data2);
-        const weatherBlock = document.getElementById(`weather-1`);
-        weatherBlock.classList.add("grid")
-        btn = document.getElementById(`btn-1`);
-        btn?.addEventListener("click", addRemoveCity)
+        findTheWeatherBlockButton()
     }
     else if (Cities.length > 0) {
         const index = Cities.length+1;
         if(deletion) {
-            // cityWeather(deletedIndex+1, data, data2);
-            btnTrigger.parentElement.classList.add("grid")
-            btnTrigger?.addEventListener("click", addRemoveCity)
-            btn = btnTrigger;
+            findTheWeatherBlockButton()
         }
         else {
-            // cityWeather(index, data, data2);
-            const weatherBlock = document.getElementById(`weather-${index}`);
-            weatherBlock.classList.add("grid")
-            btn = document.getElementById(`btn-${index}`);
-            btn?.addEventListener("click", addRemoveCity)
+            findTheWeatherBlockButton()
         }
     }
     hideButton(addCityButtonBlock)
+}
+
+async function buttonFetchWeatherNew2(id) {
+    try {
+        const res = await fetch(`/api/get-weather?city=${cityInfo.name}`);
+        const res2 = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${cityInfo.lat}&longitude=${cityInfo.long}&current_weather=true&hourly=dewpoint_2m,uv_index&timezone=auto`);
+        const data = await res.json();
+        const data2 = await res2.json();
+
+        buttonCityWeather(id, data, data2)
+        nameOfTheCityFromButton = data.name;
+    }
+    catch(err) {
+        console.log(`error ${err}`)
+    }
 }
 
 async function searchForCity(input) {
@@ -590,6 +656,192 @@ async function searchForCity(input) {
     }
 }
 
+async function searchForCityWithButton(input, id) {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${input.value}&count=1&format=json`
+    const res = await fetch(url)
+    const data = await res.json()
+    
+    console.log(data)
+
+    if(!data.results) {
+        console.log("City is not found");
+        return null;
+    }
+    else {
+        const city = data.results[0];
+        cityInfo = {
+            name: city.name,
+            lat: city.latitude,
+            long: city.longitude
+        };
+        console.log(cityInfo)
+        buttonFetchWeatherNew2(id)
+        // Cities.unshift(cityInfo.name)
+        // console.log(Cities)
+    }
+}
+
+function findTheWeatherBlock(data, data2) {
+    let weatherBlock1 = document.getElementById("weather-1")
+    let weatherBlock2 = document.getElementById("weather-2")
+    let weatherBlock3 = document.getElementById("weather-3")
+    let weatherBlock4 = document.getElementById("weather-4")
+    if(!weatherBlock1.classList.contains("grid")) {
+        cityWeather(1, data, data2);
+        weatherBlock1.classList.add("grid")
+        weatherBlock1.classList.add("opacity")
+        btn = document.getElementById(`btn-1`);
+        btn?.addEventListener("click", addRemoveCity)
+        deletedIndex = 0;
+    }
+    else if(!weatherBlock2.classList.contains("grid")) {
+        cityWeather(2, data, data2);
+        weatherBlock2.classList.add("grid")
+        weatherBlock2.classList.add("opacity")
+        btn = document.getElementById(`btn-2`);
+        btn?.addEventListener("click", addRemoveCity)
+        deletedIndex = 1;
+    }
+    else if(!weatherBlock3.classList.contains("grid")) {
+        cityWeather(3, data, data2);
+        weatherBlock3.classList.add("grid")
+        weatherBlock3.classList.add("opacity")
+        btn = document.getElementById(`btn-3`);
+        btn?.addEventListener("click", addRemoveCity)
+        deletedIndex = 2;
+    }
+    else if(!weatherBlock4.classList.contains("grid")) {
+        cityWeather(4, data, data2);
+        weatherBlock4.classList.add("grid")
+        weatherBlock4.classList.add("opacity")
+        btn = document.getElementById(`btn-4`);
+        btn?.addEventListener("click", addRemoveCity)
+        deletedIndex = 3;
+    }
+}
+
+function findTheWeatherBlockButton() {
+    let weatherBlock1 = document.getElementById("weather-1")
+    let weatherBlock2 = document.getElementById("weather-2")
+    let weatherBlock3 = document.getElementById("weather-3")
+    let weatherBlock4 = document.getElementById("weather-4")
+    if(!weatherBlock1.classList.contains("grid")) {
+        buttonWeatherH1(1)
+        let inputH1 = document.getElementById(`input-1`)
+        let formH1 = document.getElementById(`form-1`)
+        inputH1?.addEventListener("input", ()=> {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                searchForCityWithButton(inputH1, 1);
+            }, 500);
+        })
+        formH1?.addEventListener("submit", (e)=> {
+            e.preventDefault();
+            buttonWeatherAntiH1(1, nameOfTheCityFromButton)
+            addRemoveCity();
+        })
+        weatherBlock1.classList.add("grid")
+        weatherBlock1.classList.add("opacity")
+        btn = document.getElementById(`btn-1`);
+        btn?.addEventListener("click", addRemoveCity)
+        deletedIndex = 0;
+    }
+    else if(!weatherBlock2.classList.contains("grid")) {
+        buttonWeatherH1(2)
+        let inputH1 = document.getElementById(`input-2`)
+        let formH1 = document.getElementById(`form-2`)
+        inputH1?.addEventListener("input", ()=> {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                searchForCityWithButton(inputH1, 2);
+            }, 500);
+        })
+        formH1?.addEventListener("submit", (e)=> {
+            e.preventDefault();
+            buttonWeatherAntiH1(2, nameOfTheCityFromButton)
+            addRemoveCity();
+        })
+        weatherBlock2.classList.add("grid")
+        weatherBlock2.classList.add("opacity")
+        btn = document.getElementById(`btn-2`);
+        btn?.addEventListener("click", addRemoveCity)
+        deletedIndex = 1;
+    }
+    else if(!weatherBlock3.classList.contains("grid")) {
+        buttonWeatherH1(3)
+        let inputH1 = document.getElementById(`input-3`)
+        let formH1 = document.getElementById(`form-3`)
+        inputH1?.addEventListener("input", ()=> {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                searchForCityWithButton(inputH1, 3);
+            }, 500);
+        })
+        formH1?.addEventListener("submit", (e)=> {
+            e.preventDefault();
+            buttonWeatherAntiH1(3, nameOfTheCityFromButton)
+            addRemoveCity();
+        })
+        weatherBlock3.classList.add("grid")
+        weatherBlock3.classList.add("opacity")
+        btn = document.getElementById(`btn-3`);
+        btn?.addEventListener("click", addRemoveCity)
+        deletedIndex = 2;
+    }
+    else if(!weatherBlock4.classList.contains("grid")) {
+        buttonWeatherH1(4)
+        let inputH1 = document.getElementById(`input-4`)
+        let formH1 = document.getElementById(`form-4`)
+        inputH1?.addEventListener("input", ()=> {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                searchForCityWithButton(inputH1, 4);
+            }, 500);
+        })
+        formH1?.addEventListener("submit", (e)=> {
+            e.preventDefault();
+            buttonWeatherAntiH1(4, nameOfTheCityFromButton)
+            addRemoveCity();
+        })
+        weatherBlock4.classList.add("grid")
+        weatherBlock4.classList.add("opacity")
+        btn = document.getElementById(`btn-4`);
+        btn?.addEventListener("click", addRemoveCity)
+        deletedIndex = 4;
+    }
+}
+
+function findDeletedWeatherBlocks() {
+    let weatherBlock1 = document.getElementById("weather-1")
+    let weatherBlock2 = document.getElementById("weather-2")
+    let weatherBlock3 = document.getElementById("weather-3")
+    let weatherBlock4 = document.getElementById("weather-4")
+    if(!weatherBlock1.classList.contains("grid")) {
+        deletion = true;
+    }
+    else if(weatherBlock1.classList.contains("grid")) {
+        deletion1 = false;
+    }
+    else if(!weatherBlock2.classList.contains("grid")) {
+        deletion1 = true;
+    }
+    else if(weatherBlock2.classList.contains("grid")) {
+        deletion1 = false;
+    }
+    else if(!weatherBlock3.classList.contains("grid")) {
+        deletion2 = true;
+    }
+    else if(weatherBlock3.classList.contains("grid")) {
+        deletion2 = false;
+    }
+    else if(!weatherBlock4.classList.contains("grid")) {
+        deletion3 = true;
+    }
+    else if(weatherBlock4.classList.contains("grid")) {
+        deletion3 = false;
+    }
+}
+
 async function fetchWeatherNew() {
     try {
         const res = await fetch(`/api/get-weather?city=${cityInfo.name}`);
@@ -598,47 +850,36 @@ async function fetchWeatherNew() {
         const data2 = await res2.json();
 
         if (Cities.length < 1) {
-            cityWeather(1, data, data2);
-            const weatherBlock = document.getElementById(`weather-1`);
-            weatherBlock.classList.add("grid")
-            btn = document.getElementById(`btn-1`);
-            btn?.addEventListener("click", addRemoveCity)
+            findTheWeatherBlock(1, data, data2)
         }
         else if (Cities.length > 0) {
             const index = Cities.length+1;
             if(deletion) {
-                cityWeather(deletedIndex+1, data, data2);
-                btnTrigger.parentElement.classList.add("grid")
-                btnTrigger?.addEventListener("click", addRemoveCity)
-                btn = btnTrigger;
+                findTheWeatherBlock(data, data2)
             }
             else {
-                cityWeather(index, data, data2);
-                const weatherBlock = document.getElementById(`weather-${index}`);
-                weatherBlock.classList.add("grid")
-                btn = document.getElementById(`btn-${index}`);
-                btn?.addEventListener("click", addRemoveCity)
+                findTheWeatherBlock(data, data2)
             }
         }
         hideButton(addCityButtonBlock)
+        console.log(data)
     } catch(err) {
         console.log(`error ${err}`)
     }
 }
 
 function addRemoveCity(e) {
-    const cityName = e.currentTarget.dataset.cityName || cityInfo.name;
-    const number = e.currentTarget.dataset.number;
+    const cityName = e?.currentTarget?.dataset?.cityName || cityInfo.name;
+    const number = e?.currentTarget?.dataset?.number;
     let btn1 = document.getElementById(`btn-${number}`);
     if (!Cities.includes(cityName) && Cities.length < 4) {
-        deletion ? Cities.splice(deletedIndex, 0, cityInfo.name) : Cities.push(cityInfo.name);
-        deletion = false;
+        deletion || deletion1 || deletion2 || deletion3 ? Cities.splice(deletedIndex, 0, cityInfo.name) : Cities.push(cityInfo.name);
+        findDeletedWeatherBlocks();
         search = false;
         btn.innerHTML = `<svg class="remove-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M200-446.67v-66.66h560v66.66H200Z"/></svg>`
         btn.parentElement.classList.add("opacity");
         saveCities();
         getIndexForButtons();
-        renderCitiesWeather();
     }
     else if(Cities.includes(cityName)) {
         let indexOfRemovedCity = Cities.indexOf(cityName)
@@ -647,14 +888,15 @@ function addRemoveCity(e) {
             btn1.parentElement.classList.remove("grid")
             btn1.parentElement.classList.remove("opacity");
             btnTrigger = btn1;
-            deletedIndex = number-1;
             deletion = true;
+            findDeletedWeatherBlocks();
             btn1.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z"/></svg>`
             clearCityWeather(number);
         }
         saveCities();
     }
     renderAddButton()
+    console.log(Cities)
 }
 
 async function renderCitiesWeather() {
@@ -776,7 +1018,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
             timeout = setTimeout(()=> {
                 searchForCity(searchInput);
             }, 500)
-            search = true;
         }
         else if(searchInput.value.length === 0) {
             search = false;

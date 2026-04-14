@@ -515,7 +515,6 @@ nav a {
 }
 
 .add-city-button-block {
-    width: 10em;
     position: relative;
     display: grid;
     justify-items: center;
@@ -607,6 +606,7 @@ nav a {
     top: -0.9em;
     right: -0.9em;
     z-index: 1;
+    cursor: pointer;
 }
 
 .btn:hover {
