@@ -4,6 +4,8 @@ const weatherProject2 = document.querySelector(".weather-project-2");
 const avatarInput = document.getElementById("avatarInput");
 const avatarImg = document.querySelector(".profile-img")
 const avatarDeleteBtn = document.querySelector(".custom-avatar-remover")
+const profileLiAvatar = document.querySelector(".mini-profile-image")
+const profileMenuAvatar = document.querySelector(".middle-profile-image")
 const usernameInput = document.querySelector(".profile-username-input");
 const saveBtn = document.querySelector(".save-btn")
 const signupButtonChangeMode = document.querySelector("#signupButton")
@@ -122,18 +124,27 @@ function changeThemeSvg(e) {
     if (lightTheme) {
         currentThemeSvg.className = "light-theme-span";
         document.documentElement.className = "light-theme";
+        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
+        profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
         localStorage.setItem("currentTheme", "lightTheme")
         localStorage.setItem("currentThemeSvg", "lightThemeSvg")
     } 
     else if (darkTheme) {
         currentThemeSvg.className = "dark-theme-span";
         document.documentElement.className = "dark-theme";
+        avatarImg.src = "images/avatars/default-avatar-darkmode.jpg"
+        profileLiAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
+        profileMenuAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
         localStorage.setItem("currentTheme", "darkTheme")
         localStorage.setItem("currentThemeSvg", "darkThemeSvg")
     } 
     else if (blackOrangeTheme) {
         currentThemeSvg.className = "black-orange-theme-span";
         document.documentElement.className = "black-orange-theme";
+        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
+        profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
         localStorage.setItem("currentTheme", "blackOrangeTheme")
         localStorage.setItem("currentThemeSvg", "blackOrangeThemeSvg")
     }
@@ -144,14 +155,23 @@ function loadTheme() {
     if(currentTheme === "darkTheme") {
         currentThemeSvg.className = "dark-theme-span";
         document.documentElement.className = "dark-theme";
+        avatarImg.src = "images/avatars/default-avatar-darkmode.jpg"
+        profileLiAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
+        profileMenuAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
     }
     else if (currentTheme === "blackOrangeTheme") {
         currentThemeSvg.className = "black-orange-theme-span";
         document.documentElement.className = "black-orange-theme";
+        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
+        profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
     }
     else {
         currentThemeSvg.className = "light-theme-span";
         document.documentElement.className = "light-theme";
+        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
+        profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
     }
 }
 
@@ -304,6 +324,16 @@ settingsBtns.forEach(el => {
     })
 })
 
+function setDefaultAvatar() {
+    const currentTheme = localStorage.getItem("currentTheme")
+    if(currentTheme === "darkTheme") {
+        avatarImg.src = "images/avatars/default-avatar-darkmode.jpg";
+    } else if(currentTheme === "lightTheme") {
+        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg";
+    } else if(currentTheme === "blackOrangeTheme") {
+        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg";
+    }
+}
 // ---------------FRONTEND TO BACKEND---------------------
 async function registration() {
     const login = signUpUserInput.value.trim();
@@ -485,7 +515,6 @@ async function checkAuth() {
 function loadProfileMenu(data) {
     const profileMenuUsername = document.querySelector(".profile-menu-username")
     const profileMenuEmail = document.querySelector(".profile-menu-email")
-    const profileMenuAvatar = document.querySelector(".middle-profile-image")
     const setUsernameA = document.querySelector(".set-username-a")
     const setEmailA = document.querySelector(".set-email-a")
     profileMenuUsername.textContent = data.name;
@@ -539,7 +568,6 @@ function getLocalUsername() {
 }
 
 function getAvatar(data) {
-    const profileMenuAvatar = document.querySelector(".middle-profile-image")
     if(avatarImg) {
         avatarImg.src = data.avatar_url;
     }
@@ -726,7 +754,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         avatarDeleteBtn.addEventListener("click", ()=> {
             URL.revokeObjectURL(url);
             avatarInput.value = "";
-            avatarImg.src = "images/FaceCat.jpg";
+            setDefaultAvatar();
         })
 
         avatarImg.onload = () => URL.revokeObjectURL(url)
