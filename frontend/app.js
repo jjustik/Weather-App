@@ -50,6 +50,8 @@ let passLengthReq = false;
 let passNumAndLettersReq = false;
 let isLogin = false;
 let authCities = null;
+let avatarUrl = null;
+let defaultAvatar = true;
 const form = document.getElementById("profileForm");
 
 //------BACKEND--------
@@ -124,27 +126,39 @@ function changeThemeSvg(e) {
     if (lightTheme) {
         currentThemeSvg.className = "light-theme-span";
         document.documentElement.className = "light-theme";
-        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
-        profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
-        profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        if(!defaultAvatar) {
+            if(avatarImg) {
+                avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
+            }
+            profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+            profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        }
         localStorage.setItem("currentTheme", "lightTheme")
         localStorage.setItem("currentThemeSvg", "lightThemeSvg")
     } 
     else if (darkTheme) {
         currentThemeSvg.className = "dark-theme-span";
         document.documentElement.className = "dark-theme";
-        avatarImg.src = "images/avatars/default-avatar-darkmode.jpg"
-        profileLiAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
-        profileMenuAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
+        if(!defaultAvatar) {
+            if(avatarImg) {
+                avatarImg.src = "images/avatars/default-avatar-darkmode.jpg"
+            }
+            profileLiAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
+            profileMenuAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
+        }
         localStorage.setItem("currentTheme", "darkTheme")
         localStorage.setItem("currentThemeSvg", "darkThemeSvg")
     } 
     else if (blackOrangeTheme) {
         currentThemeSvg.className = "black-orange-theme-span";
         document.documentElement.className = "black-orange-theme";
-        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
-        profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
-        profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        if(!defaultAvatar) {
+            if(avatarImg) {
+                avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
+            }
+            profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+            profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        }
         localStorage.setItem("currentTheme", "blackOrangeTheme")
         localStorage.setItem("currentThemeSvg", "blackOrangeThemeSvg")
     }
@@ -155,23 +169,35 @@ function loadTheme() {
     if(currentTheme === "darkTheme") {
         currentThemeSvg.className = "dark-theme-span";
         document.documentElement.className = "dark-theme";
-        avatarImg.src = "images/avatars/default-avatar-darkmode.jpg"
-        profileLiAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
-        profileMenuAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
+        if(!defaultAvatar) {
+            if(avatarImg) {
+                avatarImg.src = "images/avatars/default-avatar-darkmode.jpg"
+            }
+            profileLiAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
+            profileMenuAvatar.src = "images/avatars/default-avatar-darkmode.jpg"
+        }
     }
     else if (currentTheme === "blackOrangeTheme") {
         currentThemeSvg.className = "black-orange-theme-span";
         document.documentElement.className = "black-orange-theme";
-        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
-        profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
-        profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        if(!defaultAvatar) {
+            if(avatarImg) {
+                avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
+            }
+            profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+            profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        }
     }
     else {
         currentThemeSvg.className = "light-theme-span";
         document.documentElement.className = "light-theme";
-        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
-        profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
-        profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        if(!defaultAvatar) {
+            if(avatarImg) {
+                avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
+            }
+            profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+            profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg"
+        }
     }
 }
 
@@ -324,14 +350,32 @@ settingsBtns.forEach(el => {
     })
 })
 
-function setDefaultAvatar() {
+function setDefaultAvatar(deletion = false) {
     const currentTheme = localStorage.getItem("currentTheme")
     if(currentTheme === "darkTheme") {
-        avatarImg.src = "images/avatars/default-avatar-darkmode.jpg";
+        if(avatarImg) {
+            avatarImg.src = "images/avatars/default-avatar-darkmode.jpg";
+        }
+        if(!deletion) {
+            profileMenuAvatar.src = "images/avatars/default-avatar-darkmode.jpg";
+            profileLiAvatar.src = "images/avatars/default-avatar-darkmode.jpg";
+        }
     } else if(currentTheme === "lightTheme") {
-        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg";
+        if(avatarImg) {
+            avatarImg.src = "images/avatars/default-avatar-lightmode.jpg";
+        }
+        if(!deletion) {
+            profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg";
+            profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg";
+        }
     } else if(currentTheme === "blackOrangeTheme") {
-        avatarImg.src = "images/avatars/default-avatar-lightmode.jpg";
+        if(avatarImg) {
+            avatarImg.src = "images/avatars/default-avatar-lightmode.jpg";
+        }
+        if(!deletion) {
+            profileMenuAvatar.src = "images/avatars/default-avatar-lightmode.jpg";
+            profileLiAvatar.src = "images/avatars/default-avatar-lightmode.jpg";
+        }
     }
 }
 // ---------------FRONTEND TO BACKEND---------------------
@@ -568,10 +612,17 @@ function getLocalUsername() {
 }
 
 function getAvatar(data) {
-    if(avatarImg) {
-        avatarImg.src = data.avatar_url;
+    if(data.avatar_url === null) {
+        setDefaultAvatar();
+        defaultAvatar = true;
+    } else {
+        if(avatarImg) {
+            avatarImg.src = `${BASE_URL}${data.avatar_url}`;
+        }
+        profileMenuAvatar.src = `${BASE_URL}${data.avatar_url}`;
+        profileLiAvatar.src = `${BASE_URL}${data.avatar_url}`;
+        defaultAvatar = false;
     }
-    profileMenuAvatar.src = data.avatar_url;
 }
 
 function saveAddButtonState() {
@@ -748,32 +799,57 @@ document.addEventListener("DOMContentLoaded", ()=> {
             return;
         }
 
-        const url = URL.createObjectURL(avatarFile)
-        avatarImg.src = url;
-        
-        avatarDeleteBtn.addEventListener("click", ()=> {
-            URL.revokeObjectURL(url);
-            avatarInput.value = "";
-            setDefaultAvatar();
-        })
-
-        avatarImg.onload = () => URL.revokeObjectURL(url)
+        if(avatarUrl) {
+            URL.revokeObjectURL(avatarUrl)
+        }
+        avatarUrl = URL.createObjectURL(avatarFile)
+        avatarImg.src = avatarUrl;
+        avatarRemoved = false;
+    })
+    avatarDeleteBtn?.addEventListener("click", ()=> {
+        if(avatarUrl) {
+            URL.revokeObjectURL(avatarUrl);
+        }
+        avatarInput.value = "";
+        setDefaultAvatar(true);
+        avatarRemoved = true;
     })
     saveBtn?.addEventListener("click", async ()=> {
         const file = avatarInput.files[0];
-        if(!file) return;
-
-        const formData = new FormData();
-        formData.append('avatar', file)
-
+        
         try {
-            const res = await fetch(`${BASE_URL}/users/me/avatar`, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            })
+            let res;
+            if(file) {
+                const formData = new FormData();
+                formData.append('avatar', file)
+
+                res = await fetch(`${BASE_URL}/users/me/avatar`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                })
+            } else if(avatarRemoved) {
+                res = await fetch(`${BASE_URL}/users/me`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ avatar_url: null }),
+                    credentials: 'include'
+                })
+            }
+            if(!res.ok) {
+                setDefaultAvatar();
+                return;
+            }
+            const data = await res.json();
+            console.log(data)
+            getAvatar(data)
+            if(avatarUrl) {
+                URL.revokeObjectURL(avatarUrl)
+                avatarUrl = null;
+            }
+            avatarInput.value = "";
         } catch(err) {
-            console.error('Ошибка сети:', err);
+            console.error('Network error:', err);
         }
     })
     signUpPassInput?.addEventListener("input", function() {
