@@ -126,7 +126,7 @@ function changeThemeSvg(e) {
     if (lightTheme) {
         currentThemeSvg.className = "light-theme-span";
         document.documentElement.className = "light-theme";
-        if(!defaultAvatar) {
+        if(defaultAvatar) {
             if(avatarImg) {
                 avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
             }
@@ -139,7 +139,7 @@ function changeThemeSvg(e) {
     else if (darkTheme) {
         currentThemeSvg.className = "dark-theme-span";
         document.documentElement.className = "dark-theme";
-        if(!defaultAvatar) {
+        if(defaultAvatar) {
             if(avatarImg) {
                 avatarImg.src = "images/avatars/default-avatar-darkmode.jpg"
             }
@@ -152,7 +152,7 @@ function changeThemeSvg(e) {
     else if (blackOrangeTheme) {
         currentThemeSvg.className = "black-orange-theme-span";
         document.documentElement.className = "black-orange-theme";
-        if(!defaultAvatar) {
+        if(defaultAvatar) {
             if(avatarImg) {
                 avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
             }
@@ -169,7 +169,7 @@ function loadTheme() {
     if(currentTheme === "darkTheme") {
         currentThemeSvg.className = "dark-theme-span";
         document.documentElement.className = "dark-theme";
-        if(!defaultAvatar) {
+        if(defaultAvatar) {
             if(avatarImg) {
                 avatarImg.src = "images/avatars/default-avatar-darkmode.jpg"
             }
@@ -180,7 +180,7 @@ function loadTheme() {
     else if (currentTheme === "blackOrangeTheme") {
         currentThemeSvg.className = "black-orange-theme-span";
         document.documentElement.className = "black-orange-theme";
-        if(!defaultAvatar) {
+        if(defaultAvatar) {
             if(avatarImg) {
                 avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
             }
@@ -191,7 +191,7 @@ function loadTheme() {
     else {
         currentThemeSvg.className = "light-theme-span";
         document.documentElement.className = "light-theme";
-        if(!defaultAvatar) {
+        if(defaultAvatar) {
             if(avatarImg) {
                 avatarImg.src = "images/avatars/default-avatar-lightmode.jpg"
             }
@@ -804,7 +804,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
         avatarUrl = URL.createObjectURL(avatarFile)
         avatarImg.src = avatarUrl;
-        avatarRemoved = false;
+        defaultAvatar = false;
     })
     avatarDeleteBtn?.addEventListener("click", ()=> {
         if(avatarUrl) {
@@ -812,7 +812,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
         avatarInput.value = "";
         setDefaultAvatar(true);
-        avatarRemoved = true;
+        defaultAvatar = true;
     })
     saveBtn?.addEventListener("click", async ()=> {
         const file = avatarInput.files[0];
@@ -828,11 +828,9 @@ document.addEventListener("DOMContentLoaded", ()=> {
                     body: formData,
                     credentials: 'include'
                 })
-            } else if(avatarRemoved) {
-                res = await fetch(`${BASE_URL}/users/me`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ avatar_url: null }),
+            } else if(defaultAvatar) {
+                res = await fetch(`${BASE_URL}/users/me/avatar`, {
+                    method: 'DELETE',
                     credentials: 'include'
                 })
             }
