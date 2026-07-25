@@ -13,6 +13,7 @@ from app.db import get_async_session
 from app.models.user import User as UserModel
 from app.config import settings
 from app.auth import (
+    get_current_user,
     hash_password, 
     authenticate_user, 
     create_access_token, 
@@ -267,3 +268,19 @@ async def refresh_token(
     )
 
     return {"message": "Tokens refreshed successfully."}
+
+
+@router.put("/logout", status_code=status.HTTP_200_OK)
+async def logout_user(
+    request: Request,
+    response: Response,
+    current_user: Annotated[UserModel, Depends(get_current_user)],
+    session: Annotated[AsyncSession, Depends(get_async_session)]
+):
+    current_user.refresh_token_hash = None
+    await session.commit()
+
+    response.delete_cookie("access_token", path="/")
+    response.delete_cookie("refresh_token", path="/auth/refresh")
+
+    return {"message": "Logged out successfully."}
