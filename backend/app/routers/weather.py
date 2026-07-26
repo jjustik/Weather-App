@@ -32,9 +32,7 @@ async def cache_weather(
     cache_key = f"weather:user:{current_user.id}"
 
     await redis_cl.hset(name=cache_key, mapping={
-        "weather": data.weather,
-        "hourly_weather": data.hourly_weather,
-        "daily_weather": data.daily_weather
+        "weather": data.weather
     })
     await redis_cl.expire(name=cache_key, time=settings.weather_cache_expire)
     return {"message": "Weather data cached successfully"}

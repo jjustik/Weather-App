@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from pathlib import Path
 from uuid import uuid4
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import update
+from sqlalchemy import update, select
 from typing import Annotated, Optional
 
 from app.db import get_async_session
@@ -92,8 +92,8 @@ async def update_city(
     }
 
 
-@router.put("/me")
-async def update_user(
+@router.put("/me/add_button")
+async def update_add_button(
     current_user: Annotated[UserModel, Depends(get_current_user)],
     session: Annotated[AsyncSession, Depends(get_async_session)]
 ):
@@ -111,6 +111,16 @@ async def update_user_name(
     session: Annotated[AsyncSession, Depends(get_async_session)],
     name: Optional[str] = None
 ):
+
+    result = await session.execute(select(UserModel).where(UserModel.name == name))
+    user = result.scalar_one_or_none()
+
+    if user:
+        raise HTTPException(
+            status_code=400,
+            detail="User with this name already exists"
+        )
+
     current_user.name = name
 
     await session.commit()

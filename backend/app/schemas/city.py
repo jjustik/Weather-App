@@ -5,5 +5,3 @@ class CityUpdate(BaseModel):
 
 class CacheCities(BaseModel):
     weather: str
-    hourly_weather: str
-    daily_weather: str
