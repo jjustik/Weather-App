@@ -1,6 +1,5 @@
 // ------ CONFIGURATION & DATA ------
 let Cities = [];
-const apiKey = "";
 let cityInfo = {};
 
 // ------ STATE & FLAGS ------
@@ -167,18 +166,6 @@ function renderCityWeather(id, data, data2, isButton = false) {
     }
 }
 
-function enableCityEditMode(id) {
-    document.querySelectorAll(`.h1-${id}`).forEach((el) => el.innerHTML = `<div class="input-form-wrapper"><form class="input-form form-${id}"><div class="button-h1-input-wrapper"><input class="button-h1-input input-${id}" type="text"></div></form><button class="cancel-btn c-btn-${id} small-cancel-btn"><svg class="cancel-svg small-cancel-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666"><path d="M256-192.35 192.35-256l224-224-224-224L256-767.65l224 224 224-224L767.65-704l-224 224 224 224L704-192.35l-224-224-224 224Z"/></svg></button></div>`);
-    document.querySelectorAll(`.c-btn-${id}`).forEach(el => el.addEventListener("click", ()=> {
-        cancelBtnInput(id)
-    }))
-    document.querySelectorAll(`#full-weather-container-${id} > .weather-h1`).forEach((el) => el.classList.add("visible"))
-}
-
-function disableCityEditMode(id, cityNameButton) {
-    document.querySelectorAll(`.h1-${id}`).forEach((el) => el.textContent = cityNameButton);
-}
-
 function cityHourlyWeather(id, svgIcons, data, isButton = false) {
     
     const hourlyWeatherArray = []
@@ -298,6 +285,18 @@ function clearCityDailyWeather(id) {
     }
 }
 
+function enableCityEditMode(id) {
+    document.querySelectorAll(`.h1-${id}`).forEach((el) => el.innerHTML = `<div class="input-form-wrapper"><form class="input-form form-${id}"><div class="button-h1-input-wrapper"><input class="button-h1-input input-${id}" type="text"></div></form><button class="cancel-btn c-btn-${id} small-cancel-btn"><svg class="cancel-svg small-cancel-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666"><path d="M256-192.35 192.35-256l224-224-224-224L256-767.65l224 224 224-224L767.65-704l-224 224 224 224L704-192.35l-224-224-224 224Z"/></svg></button></div>`);
+    document.querySelectorAll(`.c-btn-${id}`).forEach(el => el.addEventListener("click", ()=> {
+        cancelBtnInput(id)
+    }))
+    document.querySelectorAll(`#full-weather-container-${id} > .weather-h1`).forEach((el) => el.classList.add("visible"))
+}
+
+function disableCityEditMode(id, cityNameButton) {
+    document.querySelectorAll(`.h1-${id}`).forEach((el) => el.textContent = cityNameButton);
+}
+
 function getWindDirection(deg) {
     const directions = [
         "N", "NNE", "NE", "ENE",
@@ -365,24 +364,6 @@ function dayOfTheWeek(data) {
 }
 
 // ---------------FRONTEND TO BACKEND---------------------
-// async function registration() {
-//     const response = await fetch(`${BASE_URL}/registration`, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ email: signUpUserInput.value.trim(), password: signUpPassInput.value.trim() })
-//     });
-//     const data = await response.json();
-//     console.log(data)
-// }
-
-// for(let i = 1; i <= 4; i++) {
-//     activeHandlers.push({
-//         h1: () => disableCityEditMode(i, nameOfTheCity),
-//         city: (e) => addRemoveCity(e),
-//         prevent: (e) => e.preventDefault(),
-//     })
-// }
-
 function hideBlock() {
     const buttonBlockContainer = document.querySelector(".block-container")
     buttonBlockContainer?.classList.add("hidden")
@@ -451,9 +432,6 @@ function hideWeatherBlocks(id) {
     weatherBlock1.classList.remove("grid")
     weatherBlock2.classList.add("hidden")
     weatherBlock3.classList.add("hidden")
-    // clearCityWeather(id, true)
-    // clearCityHourlyWeather(id)
-    // clearCityDailyWeather(id)
     searchingWeatherBlocksCleared = true;
 }
 
@@ -708,31 +686,6 @@ function checkInputH1() {
     })
 }
 
-// function antiCheckInputH1() {
-//     let i = getIndex();
-//     let formH1s = document.querySelectorAll(`.form-${i}`)
-//     let btns = document.querySelectorAll(`.btn-${i}`)
-//     const newHandlers = {
-//         h1: () => disableCityEditMode(i, nameOfTheCity),
-//         city: (e) => addRemoveCity(e),
-//         prevent: (e) => e.preventDefault(),
-//     }
-//     formH1s.forEach(formH1 => {
-//         formH1?.removeEventListener("submit", newHandlers.h1)
-//         formH1?.removeEventListener("submit", newHandlers.city)
-//     })
-//     btns.forEach(btn => {
-//         if(btn.dataset.hasH1Listener) {
-//             btn?.removeEventListener("click", newHandlers.h1)
-//             delete btn.dataset.hasH1Listener;
-//         }
-//         if(btn.dataset.hasListener) {
-//             btn?.removeEventListener("click", newHandlers.city)
-//             delete btn.dataset.hasListener;
-//         }
-//     })
-// }
-
 function syncButtonInputs(e) {
     const inputs = document.querySelectorAll(".weather-project-2 input, .weather-project input, .weather-project-3 input");
     inputs.forEach(input => {
@@ -759,7 +712,6 @@ function findTheWeatherBlockButton1() {
                 hideWeatherBlocks(i)
             }
             syncButtonInputs(e)
-            // antiCheckInputH1();
             clearTimeout(timeout)
             timeout = setTimeout(() => {
                 searchForCityWithButton(inputH1, i);
@@ -1084,7 +1036,7 @@ async function renderCitiesWeather() {
                 };
                 const res3 = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${cityInfo.lat}&longitude=${cityInfo.long}&current_weather=true&hourly=dewpoint_2m,uv_index&timezone=auto`);
                 const data3 = await res3.json()
-    
+
                 renderCityWeather(blockIndex, data, data3);
                 searchInProcess = false;
                 currentBtns.forEach(currentBtn => {
@@ -1409,7 +1361,7 @@ function addButtonsToggleFunction() {
             fullWeatherContainer.querySelector(".weather-h1").classList.add("hidden")
             fullWeatherContainer.querySelector(".add-city-button-block-1").classList.add("grid")
             fullWeatherContainer.classList.remove("hidden")
-            autoSwitchByElement(fullWeatherContainers[i-1])
+            // autoSwitchByElement(fullWeatherContainers[i-1])
             addEventListenerForAddButton()
         }
         saveAddButtonState();
@@ -1629,8 +1581,10 @@ function getLastIndex() {
 }
 
 async function appRun() {
-    await loadCities();
-    await loadAddButtonState();
+    if(isLoggedIn) {
+        await loadCities();
+        await loadAddButtonState();
+    }
     addButonBlockTop();
     renderCitiesWeather();
     renderHourlyCitiesWeather();

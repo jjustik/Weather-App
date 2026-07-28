@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 import redis
 import httpx
 from typing import Annotated
+import json
 
 from app.config import settings
 from app.redis import get_redis
@@ -30,15 +31,13 @@ async def cache_weather(
     redis_cl: Annotated[redis.Redis, Depends(get_redis)]
 ):
     cache_key = f"weather:user:{current_user.id}"
-
-    await redis_cl.hset(name=cache_key, mapping={
-        "weather": data.weather
-    })
-    await redis_cl.expire(name=cache_key, time=settings.weather_cache_expire)
-    return {"message": "Weather data cached successfully"}
+    city_name = data.weather["location"]["name"].lower()
+    await redis_cl.hset(cache_key, city_name, json.dumps(data.weather))
+    await redis_cl.expire(cache_key, settings.weather_cache_expire)
+    return {"message": f"Weather for {city_name} cached successfully"}
 
 
-@router.get("/cache", response_model=CacheCities)
+@router.get("/cache")
 async def get_cached_weather(
     current_user: Annotated[UserModel, Depends(get_current_user)],
     redis_cl: Annotated[redis.Redis, Depends(get_redis)]
@@ -47,6 +46,8 @@ async def get_cached_weather(
     cached_data = await redis_cl.hgetall(cache_key)
 
     if not cached_data:
-        raise HTTPException(status_code=404, detail="No cached weather data found")
-    
-    return cached_data
+        return {}
+    return {
+        (k.decode() if isinstance(k, bytes) else k): json.loads(v)
+        for k, v in cached_data.items()
+    }

@@ -105,10 +105,15 @@ def create_refresh_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, settings.refresh_secret_key, algorithm=settings.algorithm)
     return encoded_jwt
 
-def verify_token(token: str) -> dict | None:
+def verify_refresh_token(token: str) -> dict | None:
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, 
+            settings.refresh_secret_key, 
+            algorithms=[settings.algorithm]
+        )
+        if payload.get("type") != "refresh":
+            return None
         return payload
-    except Exception:
-
+    except InvalidTokenError:
         return None

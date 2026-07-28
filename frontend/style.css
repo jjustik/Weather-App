@@ -1558,6 +1558,10 @@ nav a span {
     font-weight: 500;
 }
 
+.wind-arrow {
+    width: 10px;
+}
+
 /* -------------BUTTONS---------------- */
 .right-arrow, .left-arrow {
     grid-row: 1;
@@ -2275,12 +2279,25 @@ nav a span {
     color: rgb(26, 210, 26);
 }
 
-.auth-error-message {
+.auth-error-message, .profile-error-message {
     display: none;
     position: absolute;
     left: 12%;
     font-size: 15px;
     color: #e82525;
+}
+
+.profile-errors {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.profile-error-message {
+    font-size: 14px;
+    left: unset;
 }
 
 .empty-username-error, .server-error, .empty-fields-error {

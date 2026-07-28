@@ -37,18 +37,23 @@ const signupUsernameTakenError = document.querySelector("#signup-error-message")
 const loginEmptyFieldsError = document.querySelector("#login-empty-fields-error-message")
 const loginServerError = document.querySelector("#login-server-error-message")
 const loginInvalidCredentialsError = document.querySelector("#login-error-message")
+const saveProfileRequirementsError = document.querySelector(".login-requirement")
+const profileServerError = document.querySelector(".profile-server-error")
 const loginVisibilitybtn = document.querySelector("#login-pass-visibility-btn")
 const signupVisibilitybtn = document.querySelector("#signup-pass-visibility-btn")
 const authErrors = document.querySelectorAll(".auth-error-message")
+const logoutBtns = document.querySelectorAll(".logout-button")
 const isMobile = window.matchMedia("(max-width: 470px)");
 const isTablet = window.matchMedia("(max-width: 810px)");
 let username;
+let currentUsername;
 let editingUsername = false;
 let shortInput = false;
 let searchBtnActive = false;
 let passLengthReq = false;
 let passNumAndLettersReq = false;
 let isLogin = false;
+let isLoggedIn = false;
 let authCities = null;
 let avatarUrl = null;
 let defaultAvatar = true;
@@ -240,17 +245,21 @@ function addErrorMessageListener() {
 }
 
 function submitProfileChanges(e, animation = false, save = true) {
+    if(!isLoggedIn) {
+        saveProfileRequirementsError.classList.add("block")
+        return;
+    }
     const usernameInput = document.querySelector(".profile-username-input");
     if(!usernameInput) {
         return;
     }
     if(save) {
         username = usernameInput.value.trim();
-    }
-    else {
+    } else {
         username = localStorage.getItem("username");
     }
-    localStorage.setItem("username", username)
+    saveUsername(username)
+    saveUsernameLocal()
     const hasValue = usernameInput.value.length > 0;
     if(hasValue) {
         setWidthForUsernameInput();
@@ -379,6 +388,25 @@ function setDefaultAvatar(deletion = false) {
     }
 }
 // ---------------FRONTEND TO BACKEND---------------------
+async function apiFetch(url, options = {}) {
+    try {
+        const res = await fetch(url, options)
+        if(res.status === 401) {
+            const refreshed = await refreshCookie();
+            if(refreshed) {
+                return await apiFetch(url, options)
+            } else {
+                updateAuthUI(false)
+                throw new Error('Session expired')
+            }
+        }
+        return res;
+    } catch(err) {
+        console.error(`Network error: ${err.message}`)
+        throw err;
+    }
+}
+
 async function registration() {
     const login = signUpUserInput.value.trim();
     const password = signUpPassInput.value.trim();
@@ -406,14 +434,14 @@ async function registration() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_email: login, password: password })
         });
-        const data = await res.json();
-        console.log(data)
         if(!res.ok) {
             const msg = Array.isArray(data?.detail) ? data.detail[0].msg : (data?.detail || 'Error')
             const error = new Error(msg)
             error.status = res.status;
             throw error;
         }
+        const data = await res.json();
+        console.log(data)
         await loginUser(login, password)
     }
     catch(err) {
@@ -488,6 +516,21 @@ async function loginUser(usernameValue, passwordValue) {
     }, 1500);
 }
 
+async function logout() {
+    try {
+        const res = await apiFetch(`${BASE_URL}/logout`, {
+            method: 'PUT',
+            credentials: 'include'
+        })
+        if(!res.ok) {
+            throw new Error(res.status)
+        }
+        window.location.replace("/index.html")
+    } catch(err) {
+        console.error(`Can't logout ${err}`)
+    }
+}
+
 function passCheck() {
     const password = signUpPassInput.value;
     const hasLetters = /[a-zA-Z]/.test(password)
@@ -527,19 +570,29 @@ function updateAuthUI(isLoggedIn) {
 
 async function checkAuth() {
     try {
-        const res = await fetch(`${BASE_URL}/users/me`, {
+        const res = await apiFetch(`${BASE_URL}/users/me`, {
             method: 'GET',
             credentials: 'include'
         })
         if(!res.ok) {
+            // if(res.status === 401) {
+            //     const refreshed = await refreshCookie();
+            //     if(refreshed) {
+            //         return await checkAuth();
+            //     }
+            //     updateAuthUI(false);
+            //     throw new Error('Refresh token expired or invalid')
+            // } else {
+            // }
             updateAuthUI(false);
-            if(form) {
-                getLocalUsername();
-            }
+            // if(form) {
+            //     getLocalUsername();
+            // }
             return;
         }
         const userData = await res.json();
         console.log('Данные залогиненного пользователя:', userData);
+        isLoggedIn = true;
         Cities = userData.cities;
         loadProfileMenu(userData)
         getAvatar(userData)
@@ -548,11 +601,28 @@ async function checkAuth() {
         }
         updateAuthUI(true)
     } catch (err) {
-        console.error('Ошибка сети при проверке авторизации', err)
+        console.error('Network error during authorization check', err.message)
         updateAuthUI(false)
-        if(form) {
-            getLocalUsername();
+        // if(form) {
+        //     getLocalUsername();
+        // }
+    }
+}
+
+async function refreshCookie() {
+    try {
+        const res = await fetch(`${BASE_URL}/refresh`, {
+            method: 'POST',
+            credentials: 'include'
+        })
+        if(!res.ok) {
+            throw new Error(res.status)
         }
+        console.log("cookie refreshed")
+        return true;
+    } catch(err) {
+        console.error(`Can't refresh cookie ${err}`)
+        return false;
     }
 }
 
@@ -598,16 +668,108 @@ signupVisibilitybtn?.addEventListener("click", ()=> {
 })
 
 function getUsername(data) {
-    if(!data.name === null) {
+    if(data.name !== null) {
         let username = data.name;
         form.innerHTML = `<h2 class="profile-username">${username}</h2>`
     }
+    currentUsername = data.name || '';
+}
+
+function setProfileUsername(username) {
+    if(username === '') username = null;
+    const profileMenuUsername = document.querySelector(".profile-menu-username")
+    const setUsernameA = document.querySelector(".set-username-a")
+    setUsernameA.classList.toggle("block", username === null)
+    profileMenuUsername.classList.toggle("hidden", username === null)
+    if(username === null) {
+        profileMenuUsername.textContent = "";
+    } else {
+        profileMenuUsername.textContent = username;
+    }
+}
+
+async function saveUsername(username = null) {
+    if(username === currentUsername) {
+        setProfileUsername(username)
+        return;
+    }
+    saveProfileRequirementsError.classList.remove("block")
+    profileServerError.classList.remove("block")
+    const query = username ? `?name=${encodeURIComponent(username)}` : '';
+    try {
+        const res = await apiFetch(`${BASE_URL}/users/me/name${query}`, {
+            method: 'PUT',
+            credentials: 'include'
+        })
+        if(!res.ok) {
+            // saveUsernameLocal()
+            const msg = Array.isArray(data?.detail) ? data.detail[0].msg : (data?.detail || 'Error')
+            const error = new Error(msg)
+            error.status = res.status;
+            throw error;
+        }
+        const data = await res.json();
+        console.log(data)
+        setProfileUsername(username)
+    } catch(err) {
+        // saveUsernameLocal()
+        if(!err.status) {
+            profileServerError.classList.add("block")
+        } else if(err.status === 422) {
+            profileServerError.textContent = err.message;
+            profileServerError.classList.add("block")
+        } else {
+            profileServerError.textContent = "Something went wrong. Please try again.";
+            profileServerError.classList.add("block")
+        }
+    }
+}
+
+function saveUsernameLocal() {
+    localStorage.setItem("username", username)
 }
 
 function getLocalUsername() {
     let username = localStorage.getItem("username") || "";
     if(username.length > 0) {
         form.innerHTML = `<h2 class="profile-username">${username}</h2>`
+    }
+}
+
+async function saveAvatar() {
+    const file = avatarInput.files[0];
+    try {
+        let res;
+        if(!defaultAvatar && file) {
+            const formData = new FormData();
+            formData.append('avatar', file)
+
+            res = await apiFetch(`${BASE_URL}/users/me/avatar`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            })
+        } else if(defaultAvatar) {
+            res = await apiFetch(`${BASE_URL}/users/me/avatar`, {
+                method: 'DELETE',
+                credentials: 'include'
+            })
+        } else {
+            return;
+        }
+        if(!res.ok) {
+            setDefaultAvatar();
+            return;
+        }
+        const data = await res.json();
+        getAvatar(data)
+        if(avatarUrl) {
+            URL.revokeObjectURL(avatarUrl)
+            avatarUrl = null;
+        }
+        avatarInput.value = "";
+    } catch(err) {
+        console.error('Network error:', err);
     }
 }
 
@@ -625,24 +787,39 @@ function getAvatar(data) {
     }
 }
 
-function saveAddButtonState() {
+async function saveAddButtonState() {
+    try {
+        const res = await apiFetch(`${BASE_URL}/users/me/add_button`, {
+            method: 'PUT',
+            credentials: 'include'
+        })
+        if(!res.ok) {
+            saveAddButtonStateLocal()
+            throw new Error(`Server status: ${res.status}`)
+        }
+    } catch(err) {
+        console.error(`Can't save add button state ${err}`)
+    }
+}
+
+function saveAddButtonStateLocal() {
     localStorage.setItem("AddButton", String(addButton))
 }
 
 async function loadAddButtonState() {
     try {
-        const res = await fetch(`${BASE_URL}/users/me`, {
+        const res = await apiFetch(`${BASE_URL}/users/me`, {
             method: 'GET',
             credentials: 'include'
         })
         if(!res.ok) {
             loadLocalAddButtonState();
-            return;
+            throw new Error(`Server status: ${res.status}`)
         }
         const userData = await res.json();
         addButton = userData.add_button
     } catch(err) {
-        console.error('Ошибка сети при загрузке городов', err)
+        console.error('Ошибка сети при загрузке флага кнопки добавления', err)
         loadLocalAddButtonState();
     }
 }
@@ -656,9 +833,26 @@ function loadLocalAddButtonState() {
     addButtonState === "true" ? addButton = true : addButton = false;
 }
 
-function saveCities() {
-    const CitiesStorage = JSON.stringify(Cities);
-    localStorage.setItem("Cities", CitiesStorage)
+async function saveCities() {
+    try {
+        const res = await apiFetch(`${BASE_URL}/users/me/city`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                cities: Cities
+            })
+        })
+        if(!res.ok) {
+            saveCitiesLocal()
+            throw new Error(`Server status: ${res.status}`)
+        }
+    } catch(err) {
+        saveCitiesLocal()
+        console.error(`Can't save cities array into the database`, err.message)
+    }
 }
 
 function saveCitiesLocal() {
@@ -668,7 +862,7 @@ function saveCitiesLocal() {
 
 async function loadCities() {
     try {
-        const res = await fetch(`${BASE_URL}/users/me`, {
+        const res = await apiFetch(`${BASE_URL}/users/me`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -689,11 +883,15 @@ function loadLocalCities() {
     Cities = JSON.parse(CitiesStorage) || []
 }
 
+async function baseAppRun() {
+    await checkAuth();
+}
+
 document.addEventListener("DOMContentLoaded", ()=> {
     loadTheme();
     getMode();
     profileMenuToggle();
-    checkAuth()
+    baseAppRun();
     themeChangeBlock.addEventListener("mouseenter", ()=> {
         const allThemes = document.querySelectorAll(".theme")
         allThemes.forEach(el => el.classList.add("pointer-events"))
@@ -814,41 +1012,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
         setDefaultAvatar(true);
         defaultAvatar = true;
     })
-    saveBtn?.addEventListener("click", async ()=> {
-        const file = avatarInput.files[0];
-        
-        try {
-            let res;
-            if(file) {
-                const formData = new FormData();
-                formData.append('avatar', file)
-
-                res = await fetch(`${BASE_URL}/users/me/avatar`, {
-                    method: 'POST',
-                    body: formData,
-                    credentials: 'include'
-                })
-            } else if(defaultAvatar) {
-                res = await fetch(`${BASE_URL}/users/me/avatar`, {
-                    method: 'DELETE',
-                    credentials: 'include'
-                })
-            }
-            if(!res.ok) {
-                setDefaultAvatar();
-                return;
-            }
-            const data = await res.json();
-            console.log(data)
-            getAvatar(data)
-            if(avatarUrl) {
-                URL.revokeObjectURL(avatarUrl)
-                avatarUrl = null;
-            }
-            avatarInput.value = "";
-        } catch(err) {
-            console.error('Network error:', err);
-        }
+    saveBtn?.addEventListener("click", ()=> {
+        saveAvatar();
     })
     signUpPassInput?.addEventListener("input", function() {
         passCheck()
@@ -859,4 +1024,5 @@ document.addEventListener("DOMContentLoaded", ()=> {
     })
     signUpBtn?.addEventListener("click", registration)
     signInBtn?.addEventListener("click", login)
+    logoutBtns.forEach(el => el.addEventListener("click", logout))
 })

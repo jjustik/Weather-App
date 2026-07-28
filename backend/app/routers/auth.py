@@ -1,6 +1,7 @@
 from datetime import timedelta
 import secrets
 from typing import Annotated
+from uuid import UUID  # <-- Добавили для приведения string к UUID
 
 from fastapi import APIRouter, BackgroundTasks, Cookie, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -18,7 +19,7 @@ from app.auth import (
     create_access_token, 
     create_refresh_token,
     token_hash,
-    verify_token
+    verify_refresh_token  # <-- ИСПРАВЛЕНО: используем верную функцию
 )
 from app.schemas.users import (
     ForgotPasswordRequest,
@@ -88,6 +89,7 @@ async def register_user(
         path="/"
     )
     
+    # ИСПРАВЛЕНО: path="/" вместо path="/refresh"
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
@@ -95,7 +97,7 @@ async def register_user(
         secure=is_production,
         samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/refresh"
+        path="/"
     )
 
     return {
@@ -143,6 +145,7 @@ async def login_user(
         path="/"
     )
     
+    # ИСПРАВЛЕНО: path="/" вместо path="/refresh"
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
@@ -150,7 +153,7 @@ async def login_user(
         secure=is_production,
         samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/refresh"
+        path="/"
     )
     
     return {"Message": "Logged in"}
@@ -197,7 +200,7 @@ async def reset_password(
             detail="Reset token has expired or is invalid."
         )
         
-    query = select(UserModel).where(UserModel.id == user_id)
+    query = select(UserModel).where(UserModel.id == UUID(user_id))
     result = await session.execute(query)
     user = result.scalar_one_or_none()
     
@@ -225,18 +228,24 @@ async def refresh_token(
     if not refresh_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token missing.") 
     
-    payload = verify_token(refresh_token)
+    # ИСПРАВЛЕНО: вызов verify_refresh_token
+    payload = verify_refresh_token(refresh_token)
     if not payload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token.")
         
     user_id_str = payload.get("sub")
 
-    result = await session.execute(select(UserModel).where(UserModel.id == user_id_str))
+    try:
+        user_id = UUID(user_id_str)
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload.")
+
+    result = await session.execute(select(UserModel).where(UserModel.id == user_id))
     user = result.scalar_one_or_none()
 
     if not user or user.refresh_token_hash != token_hash(refresh_token):
         response.delete_cookie("access_token", path="/")
-        response.delete_cookie("refresh_token", path="/refresh")
+        response.delete_cookie("refresh_token", path="/")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token.")
     
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
@@ -258,6 +267,7 @@ async def refresh_token(
         path="/"
     )
 
+    # ИСПРАВЛЕНО: path="/" вместо path="/refresh"
     response.set_cookie(
         key="refresh_token",
         value=new_refresh_token,
@@ -265,7 +275,7 @@ async def refresh_token(
         secure=is_production,
         samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/refresh"
+        path="/"
     )
 
     return {"message": "Tokens refreshed successfully."}
@@ -282,6 +292,6 @@ async def logout_user(
     await session.commit()
 
     response.delete_cookie("access_token", path="/")
-    response.delete_cookie("refresh_token", path="/refresh")
+    response.delete_cookie("refresh_token", path="/")
 
     return {"message": "Logged out successfully."}
