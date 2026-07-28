@@ -11,7 +11,6 @@ from app.redis import get_redis
 from app.config import settings
 from app.db import get_async_session
 from app.models.user import User as UserModel
-from app.config import settings
 from app.auth import (
     get_current_user,
     hash_password, 
@@ -33,6 +32,12 @@ DEFAULT_AVATAR_URL = "/media/default-avatar.jpg"
 router = APIRouter(tags=["Auth"])
 
 
+def check_is_production(request: Request) -> bool:
+    """Вспомогательная функция для определения прод-среды."""
+    base_url = str(request.base_url)
+    return "localhost" not in base_url and "127.0.0.1" not in base_url
+
+
 @router.post("/registration")
 async def register_user(
     request: Request,
@@ -43,7 +48,6 @@ async def register_user(
     email_value = user.user_email.strip().lower()
 
     existing_user_query = select(UserModel).where((UserModel.email == email_value))
-
     existing_user_result = await session.execute(existing_user_query)
     existing_user = existing_user_result.scalar_one_or_none()
 
@@ -53,13 +57,12 @@ async def register_user(
             detail="User with this email already exists"
         )
     
-    else:
-        new_user = UserModel(
-            email=email_value,
-            name=None,
-            password_hash=hash_password(user.password),
-            avatar_url=None,
-        )
+    new_user = UserModel(
+        email=email_value,
+        name=None,
+        password_hash=hash_password(user.password),
+        avatar_url=None,
+    )
 
     session.add(new_user)
     await session.commit()
@@ -73,7 +76,7 @@ async def register_user(
     new_user.refresh_token_hash = token_hash(refresh_token)
     await session.commit()
 
-    is_production = "localhost" not in str(request.base_url)
+    is_production = check_is_production(request)
 
     response.set_cookie(
         key="access_token",
@@ -128,7 +131,7 @@ async def login_user(
     user.refresh_token_hash = token_hash(refresh_token)
     await session.commit()
 
-    is_production = "localhost" not in str(request.base_url)
+    is_production = check_is_production(request)
 
     response.set_cookie(
         key="access_token",
@@ -185,7 +188,6 @@ async def reset_password(
     session: Annotated[AsyncSession, Depends(get_async_session)],
     redis = Depends(get_redis)
 ):
-    
     token_key = f"reset:{data.token}"
     user_id = await redis.get(token_key)
     
@@ -205,11 +207,9 @@ async def reset_password(
             detail="User not found."
         )
     user.password_hash = hash_password(data.new_password)
-    
     user.refresh_token_hash = None 
     
     await session.commit()
-    
     await redis.delete(token_key)
     
     return {"message": "Password successfully reset."}
@@ -220,8 +220,8 @@ async def refresh_token(
     request: Request,
     response: Response,
     session: Annotated[AsyncSession, Depends(get_async_session)],
-    refresh_token: Annotated[str | None, Cookie()] = None):
-
+    refresh_token: Annotated[str | None, Cookie()] = None
+):
     if not refresh_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token missing.") 
     
@@ -236,16 +236,17 @@ async def refresh_token(
 
     if not user or user.refresh_token_hash != token_hash(refresh_token):
         response.delete_cookie("access_token", path="/")
-        response.delete_cookie("refresh_token", path="/auth/refresh")
+        response.delete_cookie("refresh_token", path="/refresh")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token.")
     
-    new_access_token = create_access_token(data={"sub": str(user.id)})
+    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
+    new_access_token = create_access_token(data={"sub": str(user.id)}, expires_delta=access_token_expires)
     new_refresh_token = create_refresh_token(data={"sub": str(user.id)})
 
     user.refresh_token_hash = token_hash(new_refresh_token)
     await session.commit()
 
-    is_production = "localhost" not in str(request.base_url)
+    is_production = check_is_production(request)
 
     response.set_cookie(
         key="access_token",
