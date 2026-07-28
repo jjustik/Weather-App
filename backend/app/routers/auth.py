@@ -89,10 +89,10 @@ async def register_user(
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=is_production,  # Изменили тут
-        samesite="none" if is_production else "lax",  # Изменили тут
+        secure=is_production,
+        samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/auth/refresh"
+        path="/refresh"
     )
 
     return {
@@ -147,7 +147,7 @@ async def login_user(
         secure=is_production,
         samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/auth/refresh"
+        path="/refresh"
     )
     
     return {"Message": "Logged in"}
@@ -264,7 +264,7 @@ async def refresh_token(
         secure=is_production,
         samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/auth/refresh"
+        path="/refresh"
     )
 
     return {"message": "Tokens refreshed successfully."}
@@ -281,6 +281,6 @@ async def logout_user(
     await session.commit()
 
     response.delete_cookie("access_token", path="/")
-    response.delete_cookie("refresh_token", path="/auth/refresh")
+    response.delete_cookie("refresh_token", path="/refresh")
 
     return {"message": "Logged out successfully."}
