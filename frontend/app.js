@@ -742,7 +742,8 @@ async function saveAvatar() {
         let res;
         if(!defaultAvatar && file) {
             const formData = new FormData();
-            formData.append('avatar', file)
+            const ext = file.name.split('.').pop() || 'jpg';
+            formData.append('avatar', file, `avatar_${Date.now()}.${ext}`)
 
             res = await apiFetch(`${BASE_URL}/users/me/avatar`, {
                 method: 'POST',
@@ -981,7 +982,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     });
     avatarInput?.addEventListener("change", (e)=> {
         const avatarFile = e.target.files[0]
-        const MAX_SIZE_MB = 20;
+        const MAX_SIZE_MB = 10;
         const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
         if (!avatarFile) return;
 
