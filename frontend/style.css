@@ -2525,6 +2525,14 @@ nav a span {
     min-width: 70%;
 }
 
+.pass-visibility-btn.is-visible .pass-visible{
+    display: flex;
+}
+
+.pass-visibility-btn.is-visible .pass-hidden{
+    display: none;
+}
+
 @media (max-width: 564px) {
     .auth-wrapper {
         padding: 20px;
