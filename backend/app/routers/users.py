@@ -49,12 +49,12 @@ async def upload_avatar(
         )
 
     contents = await avatar.read()
-    max_size = 2 * 1024 * 1024
+    max_size = 10 * 1024 * 1024
 
     if len(contents) > max_size:
         raise HTTPException(
             status_code=400,
-            detail="Avatar is too large. Max size is 2 MB",
+            detail="Avatar is too large. Max size is 10 MB",
         )
 
     filename = f"{current_user.id}_{uuid4().hex}{extension}"

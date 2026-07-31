@@ -112,3 +112,17 @@ def verify_token(token: str) -> dict | None:
     except Exception:
 
         return None
+
+
+async def get_optional_user(
+        access_token: Annotated[str | None, Cookie()] = None,
+        session: Annotated[AsyncSession, Depends(get_async_session)] = None
+) -> UserModel | None:
+    if access_token is None:
+        return None
+
+    try:
+        return await get_current_user(access_token=access_token, session=session)
+    except HTTPException:
+        return None
+    
