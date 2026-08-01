@@ -107,13 +107,22 @@ def create_refresh_token(data: dict):
 
 def verify_refresh_token(token: str) -> dict | None:
     try:
-        payload = jwt.decode(
-            token, 
-            settings.refresh_secret_key, 
-            algorithms=[settings.algorithm]
-        )
-        if payload.get("type") != "refresh":
-            return None
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         return payload
-    except InvalidTokenError:
+    except Exception:
+
         return None
+
+
+async def get_optional_user(
+        access_token: Annotated[str | None, Cookie()] = None,
+        session: Annotated[AsyncSession, Depends(get_async_session)] = None
+) -> UserModel | None:
+    if access_token is None:
+        return None
+
+    try:
+        return await get_current_user(access_token=access_token, session=session)
+    except HTTPException:
+        return None
+    
