@@ -31,7 +31,7 @@ const actionBar2 = document.querySelector("#actionBar2")
 const footer = document.querySelector("footer")
 const passLengthReqP = document.querySelector("#req8char");
 const passNumAndLettersReqP = document.querySelector("#lettersandnumbersreq");
-const signupEmptyUserError = document.querySelector("#signup-empty-username-error-message")
+const signupEmptyUserError = document.querySelector("#signup-empty-email-error-message")
 const signupServerError = document.querySelector("#signup-server-error-message")
 const signupUsernameTakenError = document.querySelector("#signup-error-message")
 const loginEmptyFieldsError = document.querySelector("#login-empty-fields-error-message")
@@ -39,10 +39,15 @@ const loginServerError = document.querySelector("#login-server-error-message")
 const loginInvalidCredentialsError = document.querySelector("#login-error-message")
 const saveProfileRequirementsError = document.querySelector(".login-requirement")
 const profileServerError = document.querySelector(".profile-server-error")
+const invalidEmailError = document.querySelector("#invalid-email-error-message")
 const loginVisibilitybtn = document.querySelector("#login-pass-visibility-btn")
 const signupVisibilitybtn = document.querySelector("#signup-pass-visibility-btn")
 const authErrors = document.querySelectorAll(".auth-error-message")
 const logoutBtns = document.querySelectorAll(".logout-button")
+const authTrack = document.querySelector(".auth-slider-track")
+const forgotPassbtn = document.querySelector(".forgot-password-btn")
+const backToLoginBtn = document.querySelector(".forgot-pass-back-to-login-btn")
+const forgotPassForm = document.querySelector('.forgot-pass-form')
 const isMobile = window.matchMedia("(max-width: 470px)");
 const isTablet = window.matchMedia("(max-width: 810px)");
 let username;
@@ -387,6 +392,90 @@ function setDefaultAvatar(deletion = false) {
         }
     }
 }
+
+forgotPassbtn?.addEventListener('click', ()=> {
+    authTrack.classList.add('show-forgot');
+})
+
+backToLoginBtn?.addEventListener('click', ()=> {
+    authTrack.classList.remove('show-forgot')
+})
+
+function setEmailLink(email) {
+    const forgotPassCheckEmailLink = document.querySelector('.forgot-pass-check-email-link')
+    const emailIconLink = document.querySelector('.email-icon-link')
+    const mailProviders = {
+        // Google
+        'gmail.com': 'https://mail.google.com',
+        'googlemail.com': 'https://mail.google.com',
+
+        // Yandex
+        'yandex.ru': 'https://mail.yandex.ru',
+        'yandex.com': 'https://mail.yandex.com',
+        'yandex.by': 'https://mail.yandex.by',
+        'yandex.kz': 'https://mail.yandex.kz',
+        'ya.ru': 'https://mail.yandex.ru',
+
+        // VK / Mail.ru
+        'mail.ru': 'https://e.mail.ru',
+        'inbox.ru': 'https://e.mail.ru',
+        'bk.ru': 'https://e.mail.ru',
+        'list.ru': 'https://e.mail.ru',
+        'internet.ru': 'https://e.mail.ru',
+
+        // Rambler
+        'rambler.ru': 'https://mail.rambler.ru',
+        'lenta.ru': 'https://mail.rambler.ru',
+        'autorambler.ru': 'https://mail.rambler.ru',
+        'myrambler.ru': 'https://mail.rambler.ru',
+        'ro.ru': 'https://mail.rambler.ru',
+
+        // Microsoft / Outlook
+        'outlook.com': 'https://outlook.live.com',
+        'hotmail.com': 'https://outlook.live.com',
+        'live.com': 'https://outlook.live.com',
+        'msn.com': 'https://outlook.live.com',
+
+        // Apple
+        'icloud.com': 'https://www.icloud.com/mail',
+        'me.com': 'https://www.icloud.com/mail',
+        'mac.com': 'https://www.icloud.com/mail',
+
+        // Yahoo & AOL
+        'yahoo.com': 'https://mail.yahoo.com',
+        'myyahoo.com': 'https://mail.yahoo.com',
+        'aol.com': 'https://mail.aol.com',
+
+        // Proton Mail
+        'proton.me': 'https://mail.proton.me',
+        'protonmail.com': 'https://mail.proton.me',
+        'pm.me': 'https://mail.proton.me',
+
+        // Другие
+        'zoho.com': 'https://mail.zoho.com',
+        'ukr.net': 'https://mail.ukr.net',
+        'gmx.com': 'https://www.gmx.com',
+        'gmx.de': 'https://www.gmx.de',
+        'web.de': 'https://web.de'
+    };
+    if (!email || !email.includes('@')) return;
+    const domain = email.split('@')[1].toLowerCase()
+    if(mailProviders[domain]) {
+        forgotPassCheckEmailLink.href = mailProviders[domain];
+        emailIconLink.href = mailProviders[domain];
+    } else {
+        forgotPassCheckEmailLink.classList.add('inactive-email-link')
+        forgotPassCheckEmailLink.removeAttribute('href')
+    }
+}
+
+function showForgotPassEmailCheckSlide() {
+    const forgotPassSlide = document.querySelector(".forgot-pass-slide")
+    const forgotPassEmailCheckSlide = document.querySelector('.forgot-pass-check-email-block')
+    forgotPassSlide.classList.add("hidden")
+    forgotPassEmailCheckSlide.classList.remove("hidden")
+}
+
 // ---------------FRONTEND TO BACKEND---------------------
 async function apiFetch(url, options = {}) {
     try {
@@ -709,6 +798,9 @@ async function saveUsername(username = null) {
         // saveUsernameLocal()
         if(!err.status) {
             profileServerError.classList.add("block")
+        } else if(err.status === 400) {
+            profileServerError.textContent = err.message;
+            profileServerError.classList.add("block")
         } else if(err.status === 422) {
             profileServerError.textContent = err.message;
             profileServerError.classList.add("block")
@@ -878,6 +970,35 @@ function loadLocalCities() {
     Cities = JSON.parse(CitiesStorage) || []
 }
 
+async function forgotPassword() {
+    const passForgotEmailInput = document.querySelector('#forgot-pass-input')
+    const emailValue = passForgotEmailInput.value.trim().toLowerCase();
+    try {
+        const res = await fetch(`${BASE_URL}/forgot-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "email": emailValue
+            })
+        })
+        if(!res.ok) {
+            const error = new Error(`Can't use forgot password function ${res.status}`)
+            error.status = res.status;
+            throw error;
+        }
+        showForgotPassEmailCheckSlide()
+        setEmailLink(emailValue)
+    } catch(err) {
+        console.log(err)
+        if(err.status === 422) {
+            invalidEmailError.classList.add('block')
+        }
+        console.log(`Can't use forgot password function ${err}`)
+    }
+}
+
 async function baseAppRun() {
     await checkAuth();
 }
@@ -935,6 +1056,10 @@ document.addEventListener("DOMContentLoaded", ()=> {
                 e.stopPropagation();
             }
         }
+    })
+    forgotPassForm.addEventListener('submit', (e)=> {
+        e.preventDefault();
+        forgotPassword();
     })
     document.addEventListener("mousedown", (e)=> {
         e.stopPropagation();

@@ -2118,13 +2118,22 @@ nav a span {
 .auth-box {
     position: relative;
     width: 100%;
-    max-width: 450px;
+    max-width: 435px;
     backdrop-filter: blur(25px);
     border: 2px solid var(--text-color);
     border-radius: 15px;
-    padding: 7.5em 2.5em 4em 2.5em;
+    padding: 6em 2em 4em;
     color: var(--text-color);
     box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+}
+
+.login-form, .reg-form {
+    justify-self: center;
+    width: 95%;
+}
+
+.reg-form {
+    margin-top: 1.5em;
 }
 
 .auth-animation {
@@ -2179,6 +2188,14 @@ nav a span {
     display: flex;
     flex-direction: column;
     margin: 30px 0 20px 0;
+}
+
+.signup-box {
+    margin: 25px 0 20px 0;
+}
+
+.forgot-pass-input-box {
+    margin: 20px 0 30px 0;
 }
 
 .user-input-box {
@@ -2256,10 +2273,115 @@ nav a span {
     justify-content: end;
 }
 
-.forgot-password-a {
+.forgot-password-btn {
     position: relative;
     height: fit-content;
     color: var(--text-color-3);
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.forgot-password-btn:hover {
+    text-decoration: underline;
+}
+
+.auth-slider {
+    width: 100%;
+    overflow: hidden;
+}
+
+.auth-slider-track {
+    display: flex;
+    width: 200%;
+    transition: transform 0.4s ease-in-out;
+}
+
+.auth-slide {
+    margin-top: 1.5em;
+    width: 50%;
+}
+
+.forgot-pass-slide {
+    position: relative;
+    margin-top: unset;
+}
+
+.auth-slider-track.show-forgot {
+    transform: translateX(-50%);
+}
+
+.forgot-pass-back-to-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    margin-bottom: 2.8em;
+}
+
+.forgot-pass-form {
+    justify-self: center;
+    width: 90%;
+}
+
+.forgot-pass-arrow-svg {
+    fill: var(--text-color);
+    width: 32px;
+}
+
+.forgot-pass-check-email-block {
+    position: relative;
+    top: -1em;
+    padding: 0.7em 0.7em 0.3em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1em;
+}
+
+.forgot-pass-check-email-text {
+    text-align: center;
+}
+
+.forgot-pass-check-email-text-large {
+    text-align: center;
+}
+
+.forgot-pass-btn-send {
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color-2);
+    width: 90%;
+    height: 50px;
+    background: var(--input-submit-btn-color);
+    font-size: 1em;
+    font-weight: 500;
+    border: 0;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.forgot-pass-check-email-link {
+    color: var(--text-color-2);
+}
+
+.email-icon {
+    width: 100px;
+    height: 100px;
+}
+
+.inactive-email-link {
+    color: var(--text-color);
 }
 
 .password-requirements {
@@ -2300,16 +2422,25 @@ nav a span {
     left: unset;
 }
 
-.empty-username-error, .server-error, .empty-fields-error {
-    top: 19%;
+.empty-email-error, .server-error {
+    top: 17%;
+}
+
+.empty-fields-error {
+    top: 18.8%;
 }
 
 #signup-error-message {
-    top: 19%;
+    top: 17%;
 }
 
 #login-error-message {
     top: 61%;
+}
+
+#invalid-email-error-message {
+    top: 61%;
+    left: 7%;
 }
 
 .input-submit {

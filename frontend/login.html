@@ -59,27 +59,56 @@
                 <div class="auth-header">
                     <span>Login</span>
                 </div>
-                <p class="auth-error-message empty-fields-error" id="login-empty-fields-error-message">All fields are required</p>
-                <p class="auth-error-message server-error" id="login-server-error-message">Network error. Server is offline.</p>
-                <div class="input-box user-input-box">
-                    <input type="text" id="login-user" class="input-field" required>
-                    <label for="login-user" class="label">Email or Username</label>
-                    <svg class="auth-icon" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M370.33-524.33Q326.67-568 326.67-634t43.66-109.67Q414-787.33 480-787.33t109.67 43.66Q633.33-700 633.33-634t-43.66 109.67Q546-480.67 480-480.67t-109.67-43.66ZM160-160v-100q0-36.67 18.5-64.17T226.67-366q65.33-30.33 127.66-45.5 62.34-15.17 125.67-15.17t125.33 15.5q62 15.5 127.34 45.17 30.33 14.33 48.83 41.83T800-260v100H160Zm66.67-66.67h506.66V-260q0-14.33-8.16-27-8.17-12.67-20.5-19-60.67-29.67-114.34-41.83Q536.67-360 480-360t-111 12.17Q314.67-335.67 254.67-306q-12.34 6.33-20.17 19-7.83 12.67-7.83 27v33.33Zm315.16-345.5Q566.67-597 566.67-634t-24.84-61.83Q517-720.67 480-720.67t-61.83 24.84Q393.33-671 393.33-634t24.84 61.83Q443-547.33 480-547.33t61.83-24.84ZM480-634Zm0 407.33Z"/></svg>
-                </div>
-                <div class="input-box pass-input-box">
-                    <input type="password" id="login-pass" class="input-field" required>
-                    <label for="login-pass" class="label">Password</label>
-                    <button class="pass-visibility-btn" id="login-pass-visibility-btn"><svg class="auth-icon visibility-icon pass-hidden" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="m634-422-48.67-48.67q20.34-63-27-108-47.33-45-107.66-26.66L402-654q17-10 36.83-14.67 19.84-4.66 41.17-4.66 72.33 0 122.83 50.5T653.33-500q0 21.33-5 41.5T634-422Zm128.67 128-46-45.33Q762-373 796.17-414.17q34.16-41.16 52.5-85.83-50-107.67-147.84-170.5-97.83-62.83-214.16-62.83-37.67 0-76.34 6.66Q371.67-720 346-710l-51.33-52q37-16.33 87.66-27.17Q433-800 483.33-800q145.67 0 264 82.17Q865.67-635.67 920-500q-25 62.33-64.83 114.5-39.84 52.17-92.5 91.5ZM808-61.33 640-226.67q-35 13-76.17 19.84Q522.67-200 480-200q-147.67 0-266.33-82.17Q95-364.33 40-500q20.33-52.33 54.67-100.5 34.33-48.17 82-90.17L56-812l46.67-47.33 750 750-44.67 48ZM222.67-644q-34.34 26.67-65.34 66.33-31 39.67-46.66 77.67 50.66 107.67 150.16 170.5t224.5 62.83q28.67 0 56.34-3.5 27.66-3.5 45-9.83L532-335.33q-11 4.33-25 6.5-14 2.16-27 2.16-71.67 0-122.5-50.16Q306.67-427 306.67-500q0-13.67 2.16-27 2.17-13.33 6.5-25l-92.66-92Zm309.66 125.67Zm-127.66 63.66Z"/></svg><svg class="auth-icon visibility-icon pass-visible" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="M602.83-377.17q50.5-50.5 50.5-122.83t-50.5-122.83q-50.5-50.5-122.83-50.5t-122.83 50.5q-50.5 50.5-50.5 122.83t50.5 122.83q50.5 50.5 122.83 50.5t122.83-50.5ZM401.5-421.5q-32.17-32.17-32.17-78.5t32.17-78.5q32.17-32.17 78.5-32.17t78.5 32.17q32.17 32.17 32.17 78.5t-32.17 78.5q-32.17 32.17-78.5 32.17t-78.5-32.17Zm-186.17 139Q96.67-365 40-500q56.67-135 175.33-217.5Q334-800 480-800t264.67 82.5Q863.33-635 920-500q-56.67 135-175.33 217.5Q626-200 480-200t-264.67-82.5ZM480-500Zm217.5 169.83q99.17-63.5 151.17-169.83-52-106.33-151.17-169.83-99.17-63.5-217.5-63.5t-217.5 63.5Q163.33-606.33 110.67-500q52.66 106.33 151.83 169.83 99.17 63.5 217.5 63.5t217.5-63.5Z"/></svg></button>
-                </div>
-                <p class="auth-error-message" id="login-error-message">Incorrect login or password</p>
-                <div class="forgot-password-container">
-                    <a class="forgot-password-a" href="#">Forgot password?</a>
-                </div>
-                <div class="input-box">
-                    <input type="submit" id="signin-button" class="input-submit" value="Login">
-                </div>
-                <div class="switch-auth-mode">
-                    <span>Don't have an account? <button class="switch-auth-mode-btn" id="signupButton">Sign Up</button></span>
+                <div class="auth-slider">
+                    <div class="auth-slider-track">
+                        <div class="auth-slide">
+                            <div class="login-form">
+                                <p class="auth-error-message empty-fields-error" id="login-empty-fields-error-message">All fields are required</p>
+                                <p class="auth-error-message server-error" id="login-server-error-message">Network error. Server is offline.</p>
+                                <div class="input-box user-input-box">
+                                    <input type="text" id="login-user" class="input-field" required>
+                                    <label for="login-user" class="label">Email or Username</label>
+                                    <svg class="auth-icon" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M370.33-524.33Q326.67-568 326.67-634t43.66-109.67Q414-787.33 480-787.33t109.67 43.66Q633.33-700 633.33-634t-43.66 109.67Q546-480.67 480-480.67t-109.67-43.66ZM160-160v-100q0-36.67 18.5-64.17T226.67-366q65.33-30.33 127.66-45.5 62.34-15.17 125.67-15.17t125.33 15.5q62 15.5 127.34 45.17 30.33 14.33 48.83 41.83T800-260v100H160Zm66.67-66.67h506.66V-260q0-14.33-8.16-27-8.17-12.67-20.5-19-60.67-29.67-114.34-41.83Q536.67-360 480-360t-111 12.17Q314.67-335.67 254.67-306q-12.34 6.33-20.17 19-7.83 12.67-7.83 27v33.33Zm315.16-345.5Q566.67-597 566.67-634t-24.84-61.83Q517-720.67 480-720.67t-61.83 24.84Q393.33-671 393.33-634t24.84 61.83Q443-547.33 480-547.33t61.83-24.84ZM480-634Zm0 407.33Z"/></svg>
+                                </div>
+                                <div class="input-box pass-input-box">
+                                    <input type="password" id="login-pass" class="input-field" required>
+                                    <label for="login-pass" class="label">Password</label>
+                                    <button class="pass-visibility-btn" id="login-pass-visibility-btn"><svg class="auth-icon visibility-icon pass-hidden" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="m634-422-48.67-48.67q20.34-63-27-108-47.33-45-107.66-26.66L402-654q17-10 36.83-14.67 19.84-4.66 41.17-4.66 72.33 0 122.83 50.5T653.33-500q0 21.33-5 41.5T634-422Zm128.67 128-46-45.33Q762-373 796.17-414.17q34.16-41.16 52.5-85.83-50-107.67-147.84-170.5-97.83-62.83-214.16-62.83-37.67 0-76.34 6.66Q371.67-720 346-710l-51.33-52q37-16.33 87.66-27.17Q433-800 483.33-800q145.67 0 264 82.17Q865.67-635.67 920-500q-25 62.33-64.83 114.5-39.84 52.17-92.5 91.5ZM808-61.33 640-226.67q-35 13-76.17 19.84Q522.67-200 480-200q-147.67 0-266.33-82.17Q95-364.33 40-500q20.33-52.33 54.67-100.5 34.33-48.17 82-90.17L56-812l46.67-47.33 750 750-44.67 48ZM222.67-644q-34.34 26.67-65.34 66.33-31 39.67-46.66 77.67 50.66 107.67 150.16 170.5t224.5 62.83q28.67 0 56.34-3.5 27.66-3.5 45-9.83L532-335.33q-11 4.33-25 6.5-14 2.16-27 2.16-71.67 0-122.5-50.16Q306.67-427 306.67-500q0-13.67 2.16-27 2.17-13.33 6.5-25l-92.66-92Zm309.66 125.67Zm-127.66 63.66Z"/></svg><svg class="auth-icon visibility-icon pass-visible" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="M602.83-377.17q50.5-50.5 50.5-122.83t-50.5-122.83q-50.5-50.5-122.83-50.5t-122.83 50.5q-50.5 50.5-50.5 122.83t50.5 122.83q50.5 50.5 122.83 50.5t122.83-50.5ZM401.5-421.5q-32.17-32.17-32.17-78.5t32.17-78.5q32.17-32.17 78.5-32.17t78.5 32.17q32.17 32.17 32.17 78.5t-32.17 78.5q-32.17 32.17-78.5 32.17t-78.5-32.17Zm-186.17 139Q96.67-365 40-500q56.67-135 175.33-217.5Q334-800 480-800t264.67 82.5Q863.33-635 920-500q-56.67 135-175.33 217.5Q626-200 480-200t-264.67-82.5ZM480-500Zm217.5 169.83q99.17-63.5 151.17-169.83-52-106.33-151.17-169.83-99.17-63.5-217.5-63.5t-217.5 63.5Q163.33-606.33 110.67-500q52.66 106.33 151.83 169.83 99.17 63.5 217.5 63.5t217.5-63.5Z"/></svg></button>
+                                </div>
+                                <p class="auth-error-message" id="login-error-message">Incorrect login or password</p>
+                                <div class="forgot-password-container">
+                                    <button class="forgot-password-btn">Forgot password?</button>
+                                </div>
+                                <div class="input-box">
+                                    <input type="submit" id="signin-button" class="input-submit" value="Login">
+                                </div>
+                                <div class="switch-auth-mode">
+                                    <span>Don't have an account? <button class="switch-auth-mode-btn" id="signupButton">Sign Up</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="auth-slide forgot-pass-slide">
+                            <button class="forgot-pass-back-to-login-btn" type="button">
+                                <svg class="forgot-pass-arrow-svg" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="M650-80 250-480l400-400 61 61.67L372.67-480 711-141.67 650-80Z"/></svg>
+                            </button>
+                            <form class="forgot-pass-form" novalidate>
+                                <p class="forgot-pass-email">Enter the email address associated with your account to reset your password.</p>
+                                <p class="auth-error-message invalid-email-error" id="invalid-email-error-message">Please enter a valid email address</p>
+                                <div class="input-box forgot-pass-input-box">
+                                    <input type="text" id="forgot-pass-input" class="input-field" required>
+                                    <label for="forgot-pass-input" class="label">Email</label>
+                                </div>
+                                <button type="submit" class="forgot-pass-btn-send">Send reset link</button>
+                            </form>
+                        </div>
+                        <div class="auth-slide forgot-pass-check-email-block hidden">
+                            <h3 class="forgot-pass-check-email-text">We’ve sent you a link!</h3>
+                            <div class="email-icon">
+                                <a class="email-icon-link" href="#" target="_blank"><img src="images/dark-theme-email-icon.jpg" class="email-icon"></a>
+                            </div>
+                            <p class="forgot-pass-check-email-text">If there's an account tied to that email, <a class="forgot-pass-check-email-link" href="#" target="_blank">check your inbox</a> for instructions to reset your password.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,28 +117,30 @@
                 <div class="auth-header">
                     <span>Sign Up</span>
                 </div>
-                <p class="auth-error-message empty-username-error" id="signup-empty-username-error-message">Email is required</p>
-                <p class="auth-error-message server-error" id="signup-server-error-message">Network error. Server is offline.</p>
-                <div class="input-box user-input-box">
-                    <input type="text" id="signup-user" class="input-field" required>
-                    <label for="signup-user" class="label">Email</label>
-                    <svg class="auth-icon" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M370.33-524.33Q326.67-568 326.67-634t43.66-109.67Q414-787.33 480-787.33t109.67 43.66Q633.33-700 633.33-634t-43.66 109.67Q546-480.67 480-480.67t-109.67-43.66ZM160-160v-100q0-36.67 18.5-64.17T226.67-366q65.33-30.33 127.66-45.5 62.34-15.17 125.67-15.17t125.33 15.5q62 15.5 127.34 45.17 30.33 14.33 48.83 41.83T800-260v100H160Zm66.67-66.67h506.66V-260q0-14.33-8.16-27-8.17-12.67-20.5-19-60.67-29.67-114.34-41.83Q536.67-360 480-360t-111 12.17Q314.67-335.67 254.67-306q-12.34 6.33-20.17 19-7.83 12.67-7.83 27v33.33Zm315.16-345.5Q566.67-597 566.67-634t-24.84-61.83Q517-720.67 480-720.67t-61.83 24.84Q393.33-671 393.33-634t24.84 61.83Q443-547.33 480-547.33t61.83-24.84ZM480-634Zm0 407.33Z"/></svg>
-                </div>
-                <p class="auth-error-message" id="signup-error-message">This email is already taken</p>
-                <div class="input-box pass-input-box">
-                    <input type="password" id="signup-pass" class="input-field" required>
-                    <label for="signup-pass" class="label">Password</label>
-                    <button class="pass-visibility-btn" id="signup-pass-visibility-btn"><svg class="auth-icon visibility-icon pass-hidden" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="m634-422-48.67-48.67q20.34-63-27-108-47.33-45-107.66-26.66L402-654q17-10 36.83-14.67 19.84-4.66 41.17-4.66 72.33 0 122.83 50.5T653.33-500q0 21.33-5 41.5T634-422Zm128.67 128-46-45.33Q762-373 796.17-414.17q34.16-41.16 52.5-85.83-50-107.67-147.84-170.5-97.83-62.83-214.16-62.83-37.67 0-76.34 6.66Q371.67-720 346-710l-51.33-52q37-16.33 87.66-27.17Q433-800 483.33-800q145.67 0 264 82.17Q865.67-635.67 920-500q-25 62.33-64.83 114.5-39.84 52.17-92.5 91.5ZM808-61.33 640-226.67q-35 13-76.17 19.84Q522.67-200 480-200q-147.67 0-266.33-82.17Q95-364.33 40-500q20.33-52.33 54.67-100.5 34.33-48.17 82-90.17L56-812l46.67-47.33 750 750-44.67 48ZM222.67-644q-34.34 26.67-65.34 66.33-31 39.67-46.66 77.67 50.66 107.67 150.16 170.5t224.5 62.83q28.67 0 56.34-3.5 27.66-3.5 45-9.83L532-335.33q-11 4.33-25 6.5-14 2.16-27 2.16-71.67 0-122.5-50.16Q306.67-427 306.67-500q0-13.67 2.16-27 2.17-13.33 6.5-25l-92.66-92Zm309.66 125.67Zm-127.66 63.66Z"/></svg><svg class="auth-icon visibility-icon pass-visible" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="M602.83-377.17q50.5-50.5 50.5-122.83t-50.5-122.83q-50.5-50.5-122.83-50.5t-122.83 50.5q-50.5 50.5-50.5 122.83t50.5 122.83q50.5 50.5 122.83 50.5t122.83-50.5ZM401.5-421.5q-32.17-32.17-32.17-78.5t32.17-78.5q32.17-32.17 78.5-32.17t78.5 32.17q32.17 32.17 32.17 78.5t-32.17 78.5q-32.17 32.17-78.5 32.17t-78.5-32.17Zm-186.17 139Q96.67-365 40-500q56.67-135 175.33-217.5Q334-800 480-800t264.67 82.5Q863.33-635 920-500q-56.67 135-175.33 217.5Q626-200 480-200t-264.67-82.5ZM480-500Zm217.5 169.83q99.17-63.5 151.17-169.83-52-106.33-151.17-169.83-99.17-63.5-217.5-63.5t-217.5 63.5Q163.33-606.33 110.67-500q52.66 106.33 151.83 169.83 99.17 63.5 217.5 63.5t217.5-63.5Z"/></svg></button>
-                </div>
-                <div class="password-requirements">
-                    <p class="password-requirements-p" id="req8char">* 8+ characters</p>
-                    <p class="password-requirements-p" id="lettersandnumbersreq">* letters & numbers</p>
-                </div>
-                <div class="input-box">
-                    <input type="submit" id="signup-button" class="input-submit" value="Sign Up">
-                </div>
-                <div class="switch-auth-mode">
-                    <span>Already have an account? <button class="switch-auth-mode-btn" id="signinButton">Sign In</button></span>
+                <div class="reg-form">
+                    <p class="auth-error-message empty-email-error" id="signup-empty-email-error-message">Email is required</p>
+                    <p class="auth-error-message server-error" id="signup-server-error-message">Network error. Server is offline.</p>
+                    <div class="input-box user-input-box">
+                        <input type="text" id="signup-user" class="input-field" required>
+                        <label for="signup-user" class="label">Email</label>
+                        <svg class="auth-icon" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="M370.33-524.33Q326.67-568 326.67-634t43.66-109.67Q414-787.33 480-787.33t109.67 43.66Q633.33-700 633.33-634t-43.66 109.67Q546-480.67 480-480.67t-109.67-43.66ZM160-160v-100q0-36.67 18.5-64.17T226.67-366q65.33-30.33 127.66-45.5 62.34-15.17 125.67-15.17t125.33 15.5q62 15.5 127.34 45.17 30.33 14.33 48.83 41.83T800-260v100H160Zm66.67-66.67h506.66V-260q0-14.33-8.16-27-8.17-12.67-20.5-19-60.67-29.67-114.34-41.83Q536.67-360 480-360t-111 12.17Q314.67-335.67 254.67-306q-12.34 6.33-20.17 19-7.83 12.67-7.83 27v33.33Zm315.16-345.5Q566.67-597 566.67-634t-24.84-61.83Q517-720.67 480-720.67t-61.83 24.84Q393.33-671 393.33-634t24.84 61.83Q443-547.33 480-547.33t61.83-24.84ZM480-634Zm0 407.33Z"/></svg>
+                    </div>
+                    <p class="auth-error-message" id="signup-error-message">This email is already taken</p>
+                    <div class="input-box pass-input-box">
+                        <input type="password" id="signup-pass" class="input-field" required>
+                        <label for="signup-pass" class="label">Password</label>
+                        <button class="pass-visibility-btn" id="signup-pass-visibility-btn"><svg class="auth-icon visibility-icon pass-hidden" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="m634-422-48.67-48.67q20.34-63-27-108-47.33-45-107.66-26.66L402-654q17-10 36.83-14.67 19.84-4.66 41.17-4.66 72.33 0 122.83 50.5T653.33-500q0 21.33-5 41.5T634-422Zm128.67 128-46-45.33Q762-373 796.17-414.17q34.16-41.16 52.5-85.83-50-107.67-147.84-170.5-97.83-62.83-214.16-62.83-37.67 0-76.34 6.66Q371.67-720 346-710l-51.33-52q37-16.33 87.66-27.17Q433-800 483.33-800q145.67 0 264 82.17Q865.67-635.67 920-500q-25 62.33-64.83 114.5-39.84 52.17-92.5 91.5ZM808-61.33 640-226.67q-35 13-76.17 19.84Q522.67-200 480-200q-147.67 0-266.33-82.17Q95-364.33 40-500q20.33-52.33 54.67-100.5 34.33-48.17 82-90.17L56-812l46.67-47.33 750 750-44.67 48ZM222.67-644q-34.34 26.67-65.34 66.33-31 39.67-46.66 77.67 50.66 107.67 150.16 170.5t224.5 62.83q28.67 0 56.34-3.5 27.66-3.5 45-9.83L532-335.33q-11 4.33-25 6.5-14 2.16-27 2.16-71.67 0-122.5-50.16Q306.67-427 306.67-500q0-13.67 2.16-27 2.17-13.33 6.5-25l-92.66-92Zm309.66 125.67Zm-127.66 63.66Z"/></svg><svg class="auth-icon visibility-icon pass-visible" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#666666"><path d="M602.83-377.17q50.5-50.5 50.5-122.83t-50.5-122.83q-50.5-50.5-122.83-50.5t-122.83 50.5q-50.5 50.5-50.5 122.83t50.5 122.83q50.5 50.5 122.83 50.5t122.83-50.5ZM401.5-421.5q-32.17-32.17-32.17-78.5t32.17-78.5q32.17-32.17 78.5-32.17t78.5 32.17q32.17 32.17 32.17 78.5t-32.17 78.5q-32.17 32.17-78.5 32.17t-78.5-32.17Zm-186.17 139Q96.67-365 40-500q56.67-135 175.33-217.5Q334-800 480-800t264.67 82.5Q863.33-635 920-500q-56.67 135-175.33 217.5Q626-200 480-200t-264.67-82.5ZM480-500Zm217.5 169.83q99.17-63.5 151.17-169.83-52-106.33-151.17-169.83-99.17-63.5-217.5-63.5t-217.5 63.5Q163.33-606.33 110.67-500q52.66 106.33 151.83 169.83 99.17 63.5 217.5 63.5t217.5-63.5Z"/></svg></button>
+                    </div>
+                    <div class="password-requirements">
+                        <p class="password-requirements-p" id="req8char">* 8+ characters</p>
+                        <p class="password-requirements-p" id="lettersandnumbersreq">* letters & numbers</p>
+                    </div>
+                    <div class="input-box signup-box">
+                        <input type="submit" id="signup-button" class="input-submit" value="Sign Up">
+                    </div>
+                    <div class="switch-auth-mode">
+                        <span>Already have an account? <button class="switch-auth-mode-btn" id="signinButton">Sign In</button></span>
+                    </div>
                 </div>
             </div>
         </div>
