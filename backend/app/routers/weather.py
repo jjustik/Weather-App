@@ -7,8 +7,10 @@ from typing import Annotated
 
 from app.config import settings
 from app.redis import get_redis
-from app.auth import get_current_user, get_optional_user
+from app.exceptions import ExternalAPIError
+from app.utils.auth import get_current_user, get_optional_user
 from app.models.user import User as UserModel
+from app.logger import logger
 
 router = APIRouter(prefix="/weather", tags=["Weather"])
 
@@ -37,7 +39,8 @@ async def get_weather(
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
             if response.status != 200:
-                raise HTTPException(status_code=response.status, detail="Error fetching weather data")
+                logger.error(f"Failed to fetch weather data for city '{city}': {response.status}")
+                raise ExternalAPIError(api_name="OpenWeatherMap", status_code=response.status, message=await response.text())
             
             weather_data = await response.json()
 
@@ -65,7 +68,8 @@ async def get_cached_weather(
     cached_data = await redis_cl.hgetall(cache_key)
 
     if not cached_data:
-        raise HTTPException(status_code=404, detail="No cached weather data found")
+        logger.warning(f"No cached weather data found for {'user ' + str(current_user.id) if current_user else 'guest'}")
+        raise ExternalAPIError(api_name="Redis", status_code=404, message="No cached weather data found")
     
     for city, info in cached_data.items():
         cached_data[city] = json.loads(info)

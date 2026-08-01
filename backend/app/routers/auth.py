@@ -8,10 +8,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.redis import get_redis
+from app.logger import logger
 from app.config import settings
 from app.db import get_async_session
 from app.models.user import User as UserModel
-from app.auth import (
+from app.exceptions import InvalidCredentialsException, InvalidResetTokenException, UserAlreadyExistsException, UserNotFoundException
+from app.utils.auth import (
     get_current_user,
     hash_password, 
     authenticate_user, 
@@ -33,7 +35,6 @@ router = APIRouter(tags=["Auth"])
 
 
 def check_is_production(request: Request) -> bool:
-    """Вспомогательная функция для определения прод-среды."""
     base_url = str(request.base_url)
     return "localhost" not in base_url and "127.0.0.1" not in base_url
 
@@ -52,10 +53,8 @@ async def register_user(
     existing_user = existing_user_result.scalar_one_or_none()
 
     if existing_user:
-        raise HTTPException(
-            status_code=400,
-            detail="User with this email already exists"
-        )
+        logger.warning(f"User with email {email_value} already exists during registration")
+        raise UserAlreadyExistsException(email_value)
     
     new_user = UserModel(
         email=email_value,
@@ -117,11 +116,8 @@ async def login_user(
 ):
     user = await authenticate_user(form_data.username, form_data.password, session)
     if not user:
-        raise HTTPException(
-            status_code=401, 
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Bearer"}
-        )
+        logger.warning(f"Incorrect email or password")
+        raise InvalidCredentialsException()
         
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(data={"sub": str(user.id)}, expires_delta=access_token_expires)
@@ -192,20 +188,16 @@ async def reset_password(
     user_id = await redis.get(token_key)
     
     if not user_id:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Reset token has expired or is invalid."
-        )
+        logger.warning(f"Invalid or expired password reset token used: {data.token}")
+        raise InvalidResetTokenException()
         
     query = select(UserModel).where(UserModel.id == user_id)
     result = await session.execute(query)
     user = result.scalar_one_or_none()
     
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found."
-        )
+        logger.error(f"User with ID {user_id} not found during password reset")
+        raise UserNotFoundException(user_id)
     user.password_hash = hash_password(data.new_password)
     user.refresh_token_hash = None 
     
@@ -223,11 +215,13 @@ async def refresh_token(
     refresh_token: Annotated[str | None, Cookie()] = None
 ):
     if not refresh_token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token missing.") 
+        logger.warning("Refresh token not provided in cookie")
+        raise InvalidResetTokenException()
     
     payload = verify_token(refresh_token)
     if not payload:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token.")
+        logger.warning("Invalid refresh token provided")
+        raise InvalidResetTokenException()
         
     user_id_str = payload.get("sub")
 
@@ -237,7 +231,8 @@ async def refresh_token(
     if not user or user.refresh_token_hash != token_hash(refresh_token):
         response.delete_cookie("access_token", path="/")
         response.delete_cookie("refresh_token", path="/refresh")
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token.")
+        logger.warning(f"Invalid refresh token for user ID {user_id_str}")
+        raise InvalidResetTokenException()
     
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     new_access_token = create_access_token(data={"sub": str(user.id)}, expires_delta=access_token_expires)
