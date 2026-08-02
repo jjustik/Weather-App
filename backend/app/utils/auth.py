@@ -15,6 +15,8 @@ from email_validator import validate_email
 from app.models.user import User as UserModel
 from app.db import get_async_session
 from app.config import settings
+from app.exceptions import UnauthorizedException, UserNotFoundException
+from app.logger import logger
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 password_hash = PasswordHash.recommended()
@@ -57,13 +59,9 @@ async def get_current_user(
     session: Annotated[AsyncSession, Depends(get_async_session)] = None
     ):
 
-    credentials_exception = HTTPException(
-        status_code=401,
-        detail="Could not validate credentials"
-    )
-
     if access_token is None:
-        raise credentials_exception
+        logger.warning("Auth failed: No access_token found in cookies")
+        raise UnauthorizedException(detail="Could not validate credentials")
 
     try:
         payload = jwt.decode(
@@ -75,12 +73,14 @@ async def get_current_user(
         user_id_str = payload.get("sub")
 
         if user_id_str is None:
-            raise credentials_exception
+            logger.warning("Auth failed: No user ID found in token payload")
+            raise UnauthorizedException(detail="Could not validate credentials")
 
         user_id = UUID(user_id_str)
 
     except (InvalidTokenError, ValueError):
-        raise credentials_exception
+        logger.warning("Auth failed: Invalid token or user ID")
+        raise UnauthorizedException(detail="Could not validate credentials")
 
     result = await session.execute(
         select(UserModel)
@@ -90,7 +90,8 @@ async def get_current_user(
     user = result.scalar_one_or_none()
 
     if user is None:
-        raise credentials_exception
+        logger.warning(f"Auth failed: User with ID {user_id} not found")
+        raise UserNotFoundException(user_id=str(user_id))
 
     return user
 
@@ -110,7 +111,6 @@ def verify_refresh_token(token: str) -> dict | None:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         return payload
     except Exception:
-
         return None
 
 

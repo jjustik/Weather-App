@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, logger
 from pathlib import Path
 from uuid import uuid4
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,7 +6,8 @@ from sqlalchemy import update, select
 from typing import Annotated, Optional
 
 from app.db import get_async_session
-from app.auth import get_current_user
+from app.exceptions import ImageTooLargeException, InvalidImageExtensionException, UserAlreadyExistsException
+from app.utils.auth import get_current_user
 from app.models.user import User as UserModel
 from app.schemas.city import CityUpdate
 
@@ -43,19 +44,15 @@ async def upload_avatar(
     extension = allowed_types.get(avatar.content_type)
 
     if extension is None:
-        raise HTTPException(
-            status_code=400,
-            detail="Only JPG, PNG and WEBP images are allowed",
-        )
+        logger.warning(f"User {current_user.id} tried to upload an invalid avatar type: {avatar.content_type}")
+        raise InvalidImageExtensionException()
 
     contents = await avatar.read()
     max_size = 10 * 1024 * 1024
 
     if len(contents) > max_size:
-        raise HTTPException(
-            status_code=400,
-            detail="Avatar is too large. Max size is 10 MB",
-        )
+        logger.warning(f"User {current_user.id} tried to upload an avatar that is too large: {len(contents)} bytes")
+        raise ImageTooLargeException()
 
     filename = f"{current_user.id}_{uuid4().hex}{extension}"
     file_path = AVATARS_DIR / filename
@@ -116,10 +113,8 @@ async def update_user_name(
     user = result.scalar_one_or_none()
 
     if user:
-        raise HTTPException(
-            status_code=400,
-            detail="User with this name already exists"
-        )
+        logger.warning(f"User {current_user.id} tried to update their name to an already existing name: {name}")
+        raise UserAlreadyExistsException(name)
 
     current_user.name = name
 
