@@ -12,12 +12,14 @@ def setup_logger():
     logger.add(
         sys.stdout,
         level="INFO",
-        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level:5}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+        enqueue=True,
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level:5}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
     )
 
     logger.add(
         LOGS_DIR / "app.log",
         level="WARNING",
+        enqueue=True,
         rotation="10 MB",
         retention="7 days",
         compression="zip",
@@ -27,9 +29,10 @@ def setup_logger():
     )
 
     logger.add(
-        LOGS_DIR/ "errors.log",
+        LOGS_DIR / "errors.log",
         level="ERROR",
         rotation="5 MB",
+        enqueue=True,
         retention="14 days",
         compression="zip",
         encoding="utf-8",
