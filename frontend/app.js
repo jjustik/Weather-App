@@ -40,6 +40,9 @@ const loginInvalidCredentialsError = document.querySelector("#login-error-messag
 const saveProfileRequirementsError = document.querySelector(".login-requirement")
 const profileServerError = document.querySelector(".profile-server-error")
 const invalidEmailError = document.querySelector("#invalid-email-error-message")
+const passResetEmptyFieldsError = document.querySelector("#pass-reset-empty-fields-error-message")
+const passDontMatchError = document.querySelector("#passwords-dont-match-error-message")
+const passResetServerError = document.querySelector("#pass-reset-server-error-message")
 const loginVisibilitybtn = document.querySelector("#login-pass-visibility-btn")
 const signupVisibilitybtn = document.querySelector("#signup-pass-visibility-btn")
 const authErrors = document.querySelectorAll(".auth-error-message")
@@ -48,6 +51,8 @@ const authTrack = document.querySelector(".auth-slider-track")
 const forgotPassbtn = document.querySelector(".forgot-password-btn")
 const backToLoginBtn = document.querySelector(".forgot-pass-back-to-login-btn")
 const forgotPassForm = document.querySelector('.forgot-pass-form')
+const checkmarkVideo = document.querySelector('#checkMarkVideo');
+const resetPassForm = document.querySelector('.reset-pass-form')
 const isMobile = window.matchMedia("(max-width: 470px)");
 const isTablet = window.matchMedia("(max-width: 810px)");
 let username;
@@ -474,6 +479,13 @@ function showForgotPassEmailCheckSlide() {
     const forgotPassEmailCheckSlide = document.querySelector('.forgot-pass-check-email-block')
     forgotPassSlide.classList.add("hidden")
     forgotPassEmailCheckSlide.classList.remove("hidden")
+}
+
+function showResetPassSuccessSlide() {
+    const resetPassSlide = document.querySelector('.reset-pass-slide')
+    const resetPassSuccessSlide = document.querySelector('.reset-pass-success-block')
+    resetPassSlide.classList.add('hidden')
+    resetPassSuccessSlide.classList.remove('hidden')
 }
 
 // ---------------FRONTEND TO BACKEND---------------------
@@ -991,12 +1003,69 @@ async function forgotPassword() {
         showForgotPassEmailCheckSlide()
         setEmailLink(emailValue)
     } catch(err) {
-        console.log(err)
         if(err.status === 422) {
             invalidEmailError.classList.add('block')
         }
         console.log(`Can't use forgot password function ${err}`)
     }
+}
+
+async function resetPassword() {
+    const newPassInput1 = document.querySelector('#reset-pass-1')
+    const newPassInput2 = document.querySelector('#reset-pass-2')
+    const urlParams = new URLSearchParams(window.location.search)
+    const token = urlParams.get('token')
+    if(!newPassInput1.value || !newPassInput2.value) {
+        passResetEmptyFieldsError.classList.add('block')
+        return;
+    } else {
+        passResetEmptyFieldsError.classList.remove('block')
+    }
+    if(newPassInput1.value !== newPassInput2.value) {
+        passDontMatchError.classList.add('block')
+        return;
+    } else {
+        passDontMatchError.classList.remove('block')
+    }
+    try {
+        const res = await fetch(`${BASE_URL}/reset-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "token": token,
+                "new_password": newPassInput2.value
+            })
+        })
+        if(!res.ok) {
+            const error = new Error(`Can't use reset password function ${res.status}`)
+            error.status = res.status;
+            throw error;
+        }
+        showResetPassSuccessSlide();
+    } catch(err) {
+        console.log(`Can't use reset password function ${err}`)
+        if(err.status === 502 || err.status === 503 || err.status === 504) {
+            passResetServerError.classList.add("block");
+        } else {
+            passResetServerError.textContent = "Something went wrong. Please try again later"
+            passResetServerError.classList.add("block");
+        }
+    }
+}
+
+//checkmark video
+if(checkmarkVideo) {
+    checkmarkVideo.playbackRate = 0.8;
+    checkmarkVideo.addEventListener('timeupdate', () => {
+        const loopStartTime = checkmarkVideo.duration * (25 / 60);
+    
+        if (checkmarkVideo.currentTime >= checkmarkVideo.duration - 0.05) {
+            checkmarkVideo.currentTime = loopStartTime;
+            checkmarkVideo.play();
+        }
+    });
 }
 
 async function baseAppRun() {
@@ -1057,9 +1126,13 @@ document.addEventListener("DOMContentLoaded", ()=> {
             }
         }
     })
-    forgotPassForm.addEventListener('submit', (e)=> {
+    forgotPassForm?.addEventListener('submit', (e)=> {
         e.preventDefault();
         forgotPassword();
+    })
+    resetPassForm?.addEventListener("submit", (e)=> {
+        e.preventDefault();
+        resetPassword();
     })
     document.addEventListener("mousedown", (e)=> {
         e.stopPropagation();

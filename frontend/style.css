@@ -1832,6 +1832,10 @@ nav a span {
     padding: 1em;
 }
 
+.reset-password-main {
+    padding: 1em;
+}
+
 .profile-img {
     position: absolute;
     width: 25em;
@@ -2127,7 +2131,17 @@ nav a span {
     box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
 }
 
-.login-form, .reg-form {
+.reset-pass-auth-box {
+    max-width: 420px;
+    padding: 4em 1.5em 4em;
+}
+
+.account-recovery-h2 {
+    text-align: center;
+    color: var(--text-color);
+}
+
+.login-form, .reg-form, .reset-pass-form {
     justify-self: center;
     width: 95%;
 }
@@ -2194,7 +2208,7 @@ nav a span {
     margin: 25px 0 20px 0;
 }
 
-.forgot-pass-input-box {
+.forgot-pass-input-box, .pass-input-box-2 {
     margin: 20px 0 30px 0;
 }
 
@@ -2334,7 +2348,7 @@ nav a span {
     width: 32px;
 }
 
-.forgot-pass-check-email-block {
+.forgot-pass-check-email-block, .reset-pass-success-block {
     position: relative;
     top: -1em;
     padding: 0.7em 0.7em 0.3em;
@@ -2346,6 +2360,39 @@ nav a span {
     border-radius: 1em;
 }
 
+.reset-pass-success-block {
+    width: 100%;
+    top: -0.5em;
+    min-height: 288px;
+}
+
+.no-pointer-events {
+    pointer-events: none
+}
+
+.pass-reset-succes-text-1, .pass-reset-succes-text-2 {
+    text-align: center;
+}
+
+.pass-reset-succes-text-1 {
+    font-size: 1.3em;
+}
+
+.pass-reset-succes-text-2 {
+    font-size: 1.1em;
+}
+
+#pass-reset-header {
+    width: 12em;
+}
+
+#pass-reset-wrapper {
+    display: flex;
+    top: 5%;
+    gap: 2em;
+    flex-direction: column;
+}
+
 .forgot-pass-check-email-text {
     text-align: center;
 }
@@ -2354,7 +2401,7 @@ nav a span {
     text-align: center;
 }
 
-.forgot-pass-btn-send {
+.forgot-pass-btn-send, .reset-pass-btn-send {
     display: flex;
     justify-self: center;
     justify-content: center;
@@ -2371,7 +2418,7 @@ nav a span {
     transition: 0.3s;
 }
 
-.forgot-pass-check-email-link {
+.reset-pass-link {
     color: var(--text-color-2);
 }
 
@@ -2426,7 +2473,7 @@ nav a span {
     top: 17%;
 }
 
-.empty-fields-error {
+.empty-fields-error-1 {
     top: 18.8%;
 }
 
@@ -3197,6 +3244,12 @@ nav a span {
     }
     .height-expansion {
         padding-bottom: 37vh;
+    }
+}
+
+@media (max-width: 460px) {
+    .account-recovery-h2 {
+        font-size: 1.8em;
     }
 }
 
