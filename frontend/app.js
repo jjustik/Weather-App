@@ -50,8 +50,10 @@ const logoutBtns = document.querySelectorAll(".logout-button")
 const authTrack = document.querySelector(".auth-slider-track")
 const forgotPassbtn = document.querySelector(".forgot-password-btn")
 const backToLoginBtn = document.querySelector(".forgot-pass-back-to-login-btn")
-const forgotPassForm = document.querySelector('.forgot-pass-form')
 const checkmarkVideo = document.querySelector('#checkMarkVideo');
+const regForm = document.querySelector('.reg-form')
+const loginForm = document.querySelector('.login-form')
+const forgotPassForm = document.querySelector('.forgot-pass-form')
 const resetPassForm = document.querySelector('.reset-pass-form')
 const isMobile = window.matchMedia("(max-width: 470px)");
 const isTablet = window.matchMedia("(max-width: 810px)");
@@ -256,7 +258,7 @@ function addErrorMessageListener() {
 
 function submitProfileChanges(e, animation = false, save = true) {
     if(!isLoggedIn) {
-        saveProfileRequirementsError.classList.add("block")
+        showProfileError(saveProfileRequirementsError)
         return;
     }
     const usernameInput = document.querySelector(".profile-username-input");
@@ -297,6 +299,7 @@ function authModeChange(mode, button) {
     button.closest(".auth-box").classList.add("auth-animation")
     button.closest(".auth-box").querySelector(".pass-visibility-btn").classList.remove('is-visible')
     button.closest(".auth-box").querySelector(".pass-input-box").querySelector(".input-field").type = 'password';
+    const targetErrorElements = document.querySelectorAll('.target-error-element').forEach(el => el.classList.remove('error-active-input-box', 'error-active-btn'))
     authInputs.forEach(input => input.value = "")
     authErrors.forEach(err => err.classList.remove("block"))
     passVisibilityBtns.forEach(btn => btn.classList.remove("flex"))
@@ -488,6 +491,39 @@ function showResetPassSuccessSlide() {
     resetPassSuccessSlide.classList.remove('hidden')
 }
 
+function showError(form, error) {
+    error.classList.add("block")
+    const targetErrorElements = form.querySelectorAll('.target-error-element');
+    let targetErrorElement = error.classList.contains("first-target-element-error") ? targetErrorElements[0] : targetErrorElements[1]
+    targetErrorElement.classList.contains('input-box') ? targetErrorElement.classList.add('error-active-input-box') : targetErrorElement.classList.add('error-active-btn');
+}
+
+function hideErrors() {
+    const errors = document.querySelectorAll('.aith-error')
+    const InputBoxes = document.querySelectorAll('.input-box');
+    errors.forEach(err => {
+        err.classList.remove("block")
+    })
+    InputBoxes.forEach(el => {
+        el.classList.remove('error-active-input-box', 'error-active-btn')
+    })
+}
+
+function showProfileError(error) {
+    error.classList.add("block")
+    const targetErrorElement = document.querySelector('.target-profile-error-element');
+    targetErrorElement.classList.add('error-active-input-box');
+}
+
+function hideProfileErrors() {
+    const errors = document.querySelectorAll('.profile-error-message')
+    const targetElement = document.querySelector('.target-profile-error-element');
+    errors.forEach(err => {
+        err.classList.remove("block")
+    })
+    targetElement.classList.remove('error-active-input-box', 'error-active-btn')
+}
+
 // ---------------FRONTEND TO BACKEND---------------------
 async function apiFetch(url, options = {}) {
     try {
@@ -511,14 +547,12 @@ async function apiFetch(url, options = {}) {
 async function registration() {
     const login = signUpUserInput.value.trim();
     const password = signUpPassInput.value.trim();
-    authErrors.forEach(err => {
-        err.classList.remove("block")
-    })
+    hideErrors();
     if(login.length === 0) {
-        signupEmptyUserError.classList.add("block")
+        showError(regForm, signupEmptyUserError)
         return;
     } else {
-        signupEmptyUserError.classList.remove("block")
+        hideErrors();
     }
     if(!passLengthReq || !passNumAndLettersReq) {
         if(!passLengthReq) {
@@ -547,15 +581,15 @@ async function registration() {
     }
     catch(err) {
         if(!err.status) {
-            signupServerError.classList.add("block")
+            showError(regForm, signupServerError)
         } else if(err.message === "User with this email or nickname already exists") {
-            signupUsernameTakenError.classList.add("block")
+            showError(regForm, signupUsernameTakenError)
         } else if(err.status === 422) {
             signupServerError.textContent = err.message;
-            signupServerError.classList.add("block")
+            showError(regForm, signupServerError)
         } else {
             signupServerError.textContent = "Something went wrong. Please try again.";
-            signupServerError.classList.add("block")
+            showError(regForm, signupServerError)
         }
     }
 }
@@ -563,14 +597,12 @@ async function registration() {
 async function login() {
     const username = loginUserInput.value.trim();
     const password = loginPassInput.value.trim();
-    authErrors.forEach(err => {
-        err.classList.remove("block")
-    })
+    hideErrors();
     if(!username || !password) {
-        loginEmptyFieldsError.classList.add("block")
+        showError(loginForm, loginEmptyFieldsError)
         return;
     } else {
-        loginEmptyFieldsError.classList.remove("block")
+        hideErrors()
     }
     try {
         isLogin = true;
@@ -578,15 +610,15 @@ async function login() {
     }
     catch(err) {
         if(!err.status) {
-            loginServerError.classList.add("block")
-        } else if(err.message === "Incorrect email or password") {
-            loginInvalidCredentialsError.classList.add("block")
+            showError(loginForm, loginServerError)
+        } else if(err.message === "Invalid credentials provided.") {
+            showError(loginForm, loginInvalidCredentialsError)
         } else if(err.status === 422) {
             loginServerError.textContent = err.message;
-            loginServerError.classList.add("block")
+            showError(loginForm, loginServerError)
         } else {
             loginServerError.textContent = "Something went wrong. Please try again.";
-            loginServerError.classList.add("block")
+            showError(loginForm, loginServerError)
         }
     }
 }
@@ -788,8 +820,7 @@ async function saveUsername(username = null) {
         setProfileUsername(username)
         return;
     }
-    saveProfileRequirementsError.classList.remove("block")
-    profileServerError.classList.remove("block")
+    hideProfileErrors();
     const query = username ? `?name=${encodeURIComponent(username)}` : '';
     try {
         const res = await apiFetch(`${BASE_URL}/users/me/name${query}`, {
@@ -809,16 +840,16 @@ async function saveUsername(username = null) {
     } catch(err) {
         // saveUsernameLocal()
         if(!err.status) {
-            profileServerError.classList.add("block")
+            showProfileError(profileServerError)
         } else if(err.status === 400) {
             profileServerError.textContent = err.message;
-            profileServerError.classList.add("block")
+            showProfileError(profileServerError)
         } else if(err.status === 422) {
             profileServerError.textContent = err.message;
-            profileServerError.classList.add("block")
+            showProfileError(profileServerError)
         } else {
             profileServerError.textContent = "Something went wrong. Please try again.";
-            profileServerError.classList.add("block")
+            showProfileError(profileServerError)
         }
     }
 }
@@ -983,6 +1014,7 @@ function loadLocalCities() {
 }
 
 async function forgotPassword() {
+    hideErrors();
     const passForgotEmailInput = document.querySelector('#forgot-pass-input')
     const emailValue = passForgotEmailInput.value.trim().toLowerCase();
     try {
@@ -1004,28 +1036,29 @@ async function forgotPassword() {
         setEmailLink(emailValue)
     } catch(err) {
         if(err.status === 422) {
-            invalidEmailError.classList.add('block')
+            showError(forgotPassForm, invalidEmailError)
         }
         console.log(`Can't use forgot password function ${err}`)
     }
 }
 
 async function resetPassword() {
+    hideErrors();
     const newPassInput1 = document.querySelector('#reset-pass-1')
     const newPassInput2 = document.querySelector('#reset-pass-2')
     const urlParams = new URLSearchParams(window.location.search)
     const token = urlParams.get('token')
     if(!newPassInput1.value || !newPassInput2.value) {
-        passResetEmptyFieldsError.classList.add('block')
+        showError(resetPassForm, passResetEmptyFieldsError)
         return;
     } else {
-        passResetEmptyFieldsError.classList.remove('block')
+        hideErrors();
     }
     if(newPassInput1.value !== newPassInput2.value) {
-        passDontMatchError.classList.add('block')
+        showError(resetPassForm, passDontMatchError)
         return;
     } else {
-        passDontMatchError.classList.remove('block')
+        hideErrors();
     }
     try {
         const res = await fetch(`${BASE_URL}/reset-password`, {
@@ -1047,10 +1080,10 @@ async function resetPassword() {
     } catch(err) {
         console.log(`Can't use reset password function ${err}`)
         if(err.status === 502 || err.status === 503 || err.status === 504) {
-            passResetServerError.classList.add("block");
+            showError(resetPassForm, passResetServerError)
         } else {
             passResetServerError.textContent = "Something went wrong. Please try again later"
-            passResetServerError.classList.add("block");
+            showError(resetPassForm, passResetServerError)
         }
     }
 }

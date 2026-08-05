@@ -173,7 +173,7 @@ async def forgot_password(
     
     await redis.setex(f"reset:{reset_token}", 900, str(user.id))
     
-    frontend_url = "https://justik-weather.vercel.app/reset-password.html"
+    frontend_url = "http://localhost:3000/reset-password.html"
     reset_link = f"{frontend_url}?token={reset_token}"
     
     background_tasks.add_task(send_reset_email, user.email, reset_link)
