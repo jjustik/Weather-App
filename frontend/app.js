@@ -43,6 +43,7 @@ const invalidEmailError = document.querySelector("#invalid-email-error-message")
 const passResetEmptyFieldsError = document.querySelector("#pass-reset-empty-fields-error-message")
 const passDontMatchError = document.querySelector("#passwords-dont-match-error-message")
 const passResetServerError = document.querySelector("#pass-reset-server-error-message")
+const usernameTooLongError = document.querySelector('.username-too-long-error')
 const loginVisibilitybtn = document.querySelector("#login-pass-visibility-btn")
 const signupVisibilitybtn = document.querySelector("#signup-pass-visibility-btn")
 const authErrors = document.querySelectorAll(".auth-error-message")
@@ -244,13 +245,12 @@ function createUsernameInput() {
 
 function addErrorMessageListener() {
     const usernameInput = document.querySelector(".profile-username-input")
-    const errorMessage = document.querySelector(".error-message")
     const maxLength = 13;
     usernameInput?.addEventListener("input", ()=> {
         if(usernameInput.value.length > maxLength) {
-            errorMessage.classList.add("block")
+            showProfileError(usernameTooLongError)
         } else {
-            errorMessage.classList.remove("block")
+            hideProfileErrors();
         }
     })
 

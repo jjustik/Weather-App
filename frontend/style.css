@@ -1877,6 +1877,7 @@ nav a span {
 #profileForm {
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 
@@ -1898,12 +1899,10 @@ nav a span {
 
 .error-message {
     display: none;
-    position: absolute;
-    top: 5.4em;
+    position: relative;
     text-align: center;
+    font-size: 14px;
     color: #ff4d4d;
-    font-size: 12px;
-    margin-top: 5px;
 }
 
 .profile-username-input:invalid ~ .error-message {
