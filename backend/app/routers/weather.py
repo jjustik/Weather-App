@@ -1,4 +1,5 @@
 import json
+import os
 
 from fastapi import APIRouter, Depends, HTTPException
 import redis
@@ -76,3 +77,13 @@ async def get_cached_weather(
         cached_data[city] = json.loads(info)
 
     return cached_data
+
+
+@router.get("/api/search")
+async def search_city(q: str):
+    key = os.getenv("SearchAPIKey")
+    url = f"https://api.weatherapi.com/v1/search.json?key={key}&q={q}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            return await response.json()
