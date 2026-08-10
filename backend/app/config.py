@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     redis_url: str
     weather_cache_expire: int
     api_key: str
+    SearchAPIKey: str
 
     model_config = SettingsConfigDict(env_file=env_path, env_file_encoding="utf-8", extra="ignore")
 
