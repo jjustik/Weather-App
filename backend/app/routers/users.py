@@ -190,3 +190,31 @@ async def validate_real_email(email: EmailStr) -> dict:
     except aiohttp.ClientError as e:
         logger.error(f"Error occurred while validating email '{email}': {str(e)}")
         return {"email": email, "is_exist": None, "reason": "Service unavailable"}
+
+
+@router.get("/email-exists")
+async def check_user_exists(
+    email: EmailStr, 
+    session: Annotated[AsyncSession, Depends(get_async_session)]
+) -> dict:
+    result = await session.execute(select(UserModel).where(UserModel.email == email))
+    user = result.scalar_one_or_none()
+
+    if user:
+        return {"exists": True}
+    else:
+        return {"exists": False}
+
+
+@router.get("/username-exists")
+async def check_username_exists(
+    name: str,
+    session: Annotated[AsyncSession, Depends(get_async_session)]
+) -> dict:
+    result = await session.execute(select(UserModel).where(UserModel.name == name))
+    user = result.scalar_one_or_none()
+
+    if user:
+        return {"exists": True}
+    else:
+        return {"exists": False}
