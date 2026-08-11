@@ -23,6 +23,8 @@ let nameOfTheCity;
 let weatherSlider;
 let weatherSlider1;
 let currentSearchId = 0;
+let currentSearchedCityId = 0;
+let searchedCitiesController = new AbortController();
 
 // ------ DOM ELEMENTS ------
 const fullWeatherContainers = document.querySelectorAll(".full-weather-container")
@@ -34,6 +36,8 @@ const addButonBlock = document.querySelector(".add-city-button-block")
 const addButtonsToggle = document.querySelectorAll(".action-button-toggle")
 const resetButtons = document.querySelectorAll(".action-button-reset")
 const reloadButtons = document.querySelectorAll(".action-button-reload")
+const searchedCitysBlock = document.querySelector('.searched-cities-block')
+const searchedCities = document.querySelectorAll('.searched-city')
 const sliderButtons = {
     right: document.querySelector("#w-arrow1"),
     left: document.querySelector("#w-arrow2")
@@ -508,33 +512,138 @@ async function buttonFetchWeatherNew(id) {
     }
 }
 
+//-----------SMART SEARCH-------------
 async function searchForCity(input, requestId) {
-    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${input.value}&count=1&format=json`
-    const res = await fetch(url)
-    const data = await res.json()
+    try {
+        const res = await fetch(`${BASE_URL}/weather/api/search?q=${encodeURIComponent(input.value)}`)
+        const data = await res.json()
 
-    if(requestId !== currentSearchId) return;
-
-    if(!data.results) {
-        console.log("City is not found");
-        return null;
-    }
-    else {
-        const city = data.results[0];
-        cityInfo = {
-            name: city.name,
-            lat: city.latitude,
-            long: city.longitude
-        };
-        let cityCheck = !Cities.includes(cityInfo.name) && Cities.length < 4;
-        console.log(cityInfo)
-        if(cityCheck) {
-            addingBlockFromButton = false;
-            addingBlockFromSearch = true;
-            fetchWeatherNew(requestId)
+        if(!res.ok) {
+            throw new Error(`Network error: ${res.status}`);
         }
+        
+        if(requestId !== currentSearchId) return;
+        
+        if(data.length === 0) {
+            showNoCityFoundBlock(requestId);
+            return null;
+        }
+        else {
+            showSearchedCities(data, requestId)
+        }
+    } catch(err) {
+        console.error('Error while getting search results:', err);
+        showNoCityFoundBlock();
     }
 }
+
+function showNoCityFoundBlock(requestId) {
+    if(requestId) {
+        if(requestId !== currentSearchId) return;
+    }
+    const searchedCitys = document.querySelectorAll('.searched-city')
+    searchedCitys[0].querySelector('.searched-city-name').textContent = 'No cities found'
+    searchedCitysBlock.classList.add('flex')
+    searchedCitys[0].classList.add('flex')
+    searchedCitys[0].classList.remove('searched-city-found')
+}
+
+function showSearchedCities(data, requestId) {
+    if(requestId !== currentSearchId) return;
+    searchedCitysBlock.classList.add('flex')
+    for(let i = 0; i < data.length; i++) {
+        const searchedCityInfo = { lat: searchedCities[i].querySelector('.searched-city-lat'), long: searchedCities[i].querySelector('.searched-city-long'), flag: searchedCities[i].querySelector('.searched-city-flag-icon'), name: searchedCities[i].querySelector('.searched-city-name'), region: searchedCities[i].querySelector('.searched-city-region') };
+        searchedCityInfo.lat.textContent = data[i].lat;
+        searchedCityInfo.long.textContent = data[i].lon;
+        searchedCityInfo.flag.src = data[i].flag_url;
+        const shortCityName = data[i].name.trim().split(/\s+/).slice(0, 2).join(' ');
+        if(data[i].name.length < 15) {
+            searchedCityInfo.name.textContent = data[i].name;
+        } else if(shortCityName.length < 15) {
+            searchedCityInfo.name.textContent = shortCityName;
+        } else {
+            searchedCityInfo.name.textContent = shortCityName.split(/\s+/)[0];
+        }
+        if(data[i].region.length < 22) {
+            searchedCityInfo.region.textContent = data[i].region;
+        } else {
+            searchedCityInfo.region.textContent = data[i].country;
+        }
+        searchedCities[i].classList.add('flex', 'searched-city-found')
+        addEventListenersForSearchedCities(data, i)
+    }
+}
+
+function hideSearchedCities() {
+    searchedCitysBlock.classList.remove('flex')
+    searchedCities.forEach(city => {
+        const searchedCityInfo = { lat: city.querySelector('.searched-city-lat'), long: city.querySelector('.searched-city-long'), flag: city.querySelector('.searched-city-flag-icon'), name: city.querySelector('.searched-city-name'), region: city.querySelector('.searched-city-region') };
+        city.classList.remove('flex')
+        searchedCityInfo.lat.textContent = '';
+        searchedCityInfo.long.textContent = '';
+        searchedCityInfo.flag.removeAttribute('src');
+        searchedCityInfo.name.textContent = '';
+        searchedCityInfo.region.textContent = '';
+    })
+    removeAllEventListenersForSearchedCities();
+}
+
+function addEventListenersForSearchedCities(data, id) {
+    searchedCities[id].addEventListener('click', ()=> {
+        chooseSearchedCity(data, id)
+    }, { signal: searchedCitiesController.signal })
+}
+
+function removeAllEventListenersForSearchedCities() {
+    searchedCitiesController.abort();
+    searchedCitiesController = new AbortController();
+}
+
+function chooseSearchedCity(data, id) {
+    currentSearchedCityId++;
+    const activeRequestId = currentSearchedCityId;
+    const city = data[id];
+    cityInfo = {
+        name: city.name,
+        lat: city.lat,
+        long: city.lon
+    };
+    let cityCheck = !Cities.includes(cityInfo.name) && Cities.length < 4;
+    console.log(cityInfo)
+    if(cityCheck) {
+        addingBlockFromButton = false;
+        addingBlockFromSearch = true;
+        fetchWeatherNew(activeRequestId)
+    }
+}
+
+// async function searchForCity(input, requestId) {
+//     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${input.value}&count=1&format=json`
+//     const res = await fetch(url)
+//     const data = await res.json()
+
+//     if(requestId !== currentSearchId) return;
+
+//     if(!data.results) {
+//         console.log("City is not found");
+//         return null;
+//     }
+//     else {
+//         const city = data.results[0];
+//         cityInfo = {
+//             name: city.name,
+//             lat: city.latitude,
+//             long: city.longitude
+//         };
+//         let cityCheck = !Cities.includes(cityInfo.name) && Cities.length < 4;
+//         console.log(cityInfo)
+//         if(cityCheck) {
+//             addingBlockFromButton = false;
+//             addingBlockFromSearch = true;
+//             fetchWeatherNew(requestId)
+//         }
+//     }
+// }
 
 async function searchForCityWithButton(input, id) {
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${input.value}&count=1&format=json`
@@ -561,7 +670,7 @@ async function searchForCityWithButton(input, id) {
 }
 
 function findTheWeatherBlock(data, data2, requestId) {
-    if (requestId !== currentSearchId) return;
+    if (requestId !== currentSearchedCityId) return;
     let i = getIndex()
 
     const weatherBlock = document.querySelector(`#mini-weather-container-${i}`);
@@ -760,7 +869,7 @@ async function fetchWeatherNew(requestId) {
         const data = await res.json();
         const data2 = await res2.json();
 
-        if (requestId !== currentSearchId) return;
+        if (requestId !== currentSearchedCityId) return;
 
         if (!res.ok) {
             if (res.status === 404) {
@@ -850,6 +959,7 @@ function addRemoveCity(e) {
         findingTheWeatherBlock = false;
         weatherRendered = false;
         searchInput.value = "";
+        hideSearchedCities();
         getIndexForButtons();
         getNamesForButtons();
         saveCities();
@@ -978,7 +1088,8 @@ function cancelBtn(id) {
         renderSliderButtons();
 
         cancelBtns.forEach(btn => btn.classList.remove("flex"))
-        searchInput.value = "";
+        // searchInput.value = "";
+        // hideSearchedCities();
         addingBlockFromSearch = false;
     }
     cancelBtns.forEach(btn => {
@@ -1561,7 +1672,7 @@ function getIndex() {
     let blockIndex;
     const weatherBlocks = document.querySelectorAll(".mini-weather-container")
     for(let i = 1; i <= weatherBlocks.length; i++) {
-        if(!weatherBlocks[i-1].classList.contains("grid")) {
+        if(!weatherBlocks[i-1].classList.contains("opacity")) {
             const id = weatherBlocks[i-1].id;
             const lastIdPart = id.split("-").pop();
             blockIndex = parseInt(lastIdPart, 10)
@@ -1581,10 +1692,8 @@ function getLastIndex() {
 }
 
 async function appRun() {
-    if(isLoggedIn) {
-        await loadCities();
-        await loadAddButtonState();
-    }
+    await loadCities();
+    await loadAddButtonState();
     addButonBlockTop();
     renderCitiesWeather();
     renderHourlyCitiesWeather();
@@ -1609,30 +1718,34 @@ document.addEventListener("DOMContentLoaded", ()=> {
         currentSearchId++;
         const activeRequestId = currentSearchId;
         if(searchInput.value.length > 0) {
+            hideSearchedCities();
             clearTimeout(timeout)
             timeout = setTimeout(()=> {
                 searchForCity(searchInput, activeRequestId);
             }, 500)
         } else {
-            deleteNewWeatherBlock();
-            correctAddButtonsPosition()
-            renderSliderButtons();
+            hideSearchedCities();
         }
+        // } else {
+        //     deleteNewWeatherBlock();
+        //     correctAddButtonsPosition()
+        //     renderSliderButtons();
+        // }
         if(addingBlockFromSearch && !searchingWeatherBlocksCleared) {
-            if(addButton) {
-                renderAddButton1();
-            }
-            else {
-                for(let i = 0; i <= 3; i++) {
-                    if(fullWeatherContainers[i].classList.contains("opacity")) {
-                        autoSwitchByElement(fullWeatherContainers[i])
-                        break;
-                    }
-                }
-            }
-            deleteNewWeatherBlock();
-            correctAddButtonsPosition()
-            renderSliderButtons();
+            // if(addButton) {
+            //     renderAddButton1();
+            // }
+            // else {
+            //     for(let i = 0; i <= 3; i++) {
+            //         if(fullWeatherContainers[i].classList.contains("opacity")) {
+            //             autoSwitchByElement(fullWeatherContainers[i])
+            //             break;
+            //         }
+            //     }
+            // }
+            // deleteNewWeatherBlock();
+            // correctAddButtonsPosition()
+            // renderSliderButtons();
         }
     })
     addCityButton.addEventListener("click", ()=> {

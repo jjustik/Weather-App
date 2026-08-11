@@ -253,7 +253,6 @@ function addErrorMessageListener() {
             hideProfileErrors();
         }
     })
-
 }
 
 function submitProfileChanges(e, animation = false, save = true) {
@@ -324,6 +323,7 @@ function hideProfileMenu() {
 }
 
 function toggleBtnAnimation() {
+    hideSearchedCities();
     searchBar.classList.toggle("active")
     if(!isTablet.matches) {
         if(searchBar.classList.contains("active")) {
@@ -582,7 +582,7 @@ async function registration() {
     catch(err) {
         if(!err.status) {
             showError(regForm, signupServerError)
-        } else if(err.message === "User with this email or nickname already exists") {
+        } else if(err.message === "User with this email already exists") {
             showError(regForm, signupUsernameTakenError)
         } else if(err.status === 422) {
             signupServerError.textContent = err.message;
