@@ -68,3 +68,9 @@ class ImageTooLargeException(AppException):
     def __init__(self, max_size_mb: int = 10):
         super().__init__(detail=f"Avatar is too large. Max size is {max_size_mb} MB.")
 
+
+class InvalidEmailException(AppException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    
+    def __init__(self, email: str):
+        super().__init__(detail=f"The email '{email}' is invalid or does not exist.")

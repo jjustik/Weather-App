@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     weather_cache_expire: int
     api_key: str
     SearchAPIKey: str
+    validation_api_key: str
 
     model_config = SettingsConfigDict(env_file=env_path, env_file_encoding="utf-8", extra="ignore")
 

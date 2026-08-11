@@ -1,12 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, logger
+import aiohttp
+import os
+
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from loguru import logger
 from pathlib import Path
+from pydantic import EmailStr
 from uuid import uuid4
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import update, select
 from typing import Annotated, Optional
 
+from app.config import settings
 from app.db import get_async_session
-from app.exceptions import ImageTooLargeException, InvalidImageExtensionException, UserAlreadyExistsException
+from app.exceptions import(
+    ImageTooLargeException, 
+    InvalidImageExtensionException, 
+    UserAlreadyExistsException, 
+    InvalidEmailException)
 from app.utils.auth import get_current_user
 from app.models.user import User as UserModel
 from app.schemas.city import CityUpdate
@@ -145,3 +155,66 @@ async def delete_avatar(
     return {
         "avatar_url": current_user.avatar_url
     }
+
+
+@router.get("/validate-real-email")
+async def validate_real_email(email: EmailStr) -> dict:
+    url = "https://emailreputation.abstractapi.com/v1/"
+    params = {
+        "api_key": settings.validation_api_key,
+        "email": email
+    }
+    
+    print(f"\n[DEBUG] KEY IN USE: '{settings.validation_api_key}'\n")
+    timeout = aiohttp.ClientTimeout(total=3.0)
+
+    try:
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(url, params=params) as response:
+                if response.status != 200:
+                    logger.error(f"Abstract API returned status {response.status} for email '{email}'")
+                    return {"email": email, "is_exist": None, "reason": "API error or limit reached"}
+                
+                data = await response.json()
+                deliverability_data = data.get("email_deliverability", {})
+                status = deliverability_data.get("status")
+
+                if status == "deliverable":
+                    is_exist = True
+                elif status == "undeliverable":
+                    is_exist = False
+                else:
+                    is_exist = None
+
+                return {"email": email, "is_exist": is_exist}
+    except aiohttp.ClientError as e:
+        logger.error(f"Error occurred while validating email '{email}': {str(e)}")
+        return {"email": email, "is_exist": None, "reason": "Service unavailable"}
+
+
+@router.get("/email-exists")
+async def check_user_exists(
+    email: EmailStr, 
+    session: Annotated[AsyncSession, Depends(get_async_session)]
+) -> dict:
+    result = await session.execute(select(UserModel).where(UserModel.email == email))
+    user = result.scalar_one_or_none()
+
+    if user:
+        return {"exists": True}
+    else:
+        return {"exists": False}
+
+
+@router.get("/username-exists")
+async def check_username_exists(
+    name: str,
+    session: Annotated[AsyncSession, Depends(get_async_session)]
+) -> dict:
+    result = await session.execute(select(UserModel).where(UserModel.name == name))
+    user = result.scalar_one_or_none()
+
+    if user:
+        return {"exists": True}
+    else:
+        return {"exists": False}
