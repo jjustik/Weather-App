@@ -12,7 +12,7 @@ from app.exceptions import ExternalAPIError
 from app.utils.auth import get_current_user, get_optional_user
 from app.models.user import User as UserModel
 from app.logger import logger
-from app.utils.weather_utils import get_country_code
+from app.utils.weather_utils import get_country_code, fix_encoding
 
 router = APIRouter(prefix="/weather", tags=["Weather"])
 
@@ -88,19 +88,16 @@ async def search_city(q: str):
         async with session.get(url) as response:
             if response.status != 200:
                 return []
-            
             cities = await response.json()
 
-            for city in cities:
-                country_name = city.get("country")
-                code = get_country_code(country_name)
+    for city in cities:
+        city.pop('url', None)
+        city["name"] = fix_encoding(city.get("name"))
+        city["region"] = fix_encoding(city.get("region"))
+        city["country"] = fix_encoding(city.get("country"))
 
-                city["country_code"] = code
-                city.pop("url", None)
+        code = get_country_code(city.get("country"))
+        city["country_code"] = code
+        city["flag"] = f"https://flagcdn.com/w40/{code}.png" if code else None
 
-                if code:
-                    city["flag_url"] = f"https://flagcdn.com/w40/{code}.png"
-                else:
-                    city["flag_url"] = None
-
-            return cities
+    return cities
