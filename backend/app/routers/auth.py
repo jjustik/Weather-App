@@ -94,7 +94,7 @@ async def register_user(
         secure=is_production,
         samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/refresh"
+        path="/"
     )
 
     return {
@@ -146,7 +146,7 @@ async def login_user(
         secure=is_production,
         samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/refresh"
+        path="/"
     )
     
     return {"Message": "Logged in"}
@@ -260,7 +260,7 @@ async def refresh_token(
         secure=is_production,
         samesite="none" if is_production else "lax",
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/refresh"
+        path="/"
     )
 
     return {"message": "Tokens refreshed successfully."}
