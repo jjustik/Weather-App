@@ -230,7 +230,7 @@ async def refresh_token(
 
     if not user or user.refresh_token_hash != token_hash(refresh_token):
         response.delete_cookie("access_token", path="/")
-        response.delete_cookie("refresh_token", path="/refresh")
+        response.delete_cookie("refresh_token", path="/")
         logger.warning(f"Invalid refresh token for user ID {user_id_str}")
         raise InvalidResetTokenException()
     
