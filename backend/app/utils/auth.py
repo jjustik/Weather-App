@@ -106,9 +106,9 @@ def create_refresh_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, settings.refresh_secret_key, algorithm=settings.algorithm)
     return encoded_jwt
 
-def verify_token(token: str) -> dict | None:
+def verify_token(token: str, secret_key: str) -> dict | None:
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        payload = jwt.decode(token, secret_key, algorithms=[settings.algorithm])
         return payload
     except Exception:
         return None
