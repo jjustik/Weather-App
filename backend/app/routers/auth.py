@@ -14,7 +14,6 @@ from app.db import get_async_session
 from app.models.user import User as UserModel
 from app.exceptions import (
     InvalidCredentialsException, 
-    InvalidResetTokenException, 
     UserAlreadyExistsException, 
     UserNotFoundException,
     InvalidRefreshTokenException,
@@ -236,12 +235,18 @@ async def refresh_token(
     result = await session.execute(select(UserModel).where(UserModel.id == user_id_str))
     user = result.scalar_one_or_none()
 
-    if not user or user.refresh_token_hash != token_hash(refresh_token):
+    if not user:
         response.delete_cookie("access_token", path="/")
         response.delete_cookie("refresh_token", path="/")
-        logger.warning(f"Invalid refresh token for user ID {user_id_str}")
+        logger.warning(f"User not found for ID: {user_id_str}")
+        raise UserNotFoundException(user_id=user_id_str)
+
+    elif user.refresh_token_hash != token_hash(refresh_token):
+        response.delete_cookie("access_token", path="/")
+        response.delete_cookie("refresh_token", path="/")
+        logger.warning(f"Refresh token hash mismatch for user ID {user_id_str}")
         raise InvalidRefreshTokenException(user_id=user_id_str)
-    
+
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     new_access_token = create_access_token(data={"sub": str(user.id)}, expires_delta=access_token_expires)
     new_refresh_token = create_refresh_token(data={"sub": str(user.id)})
