@@ -12,7 +12,15 @@ from app.logger import logger
 from app.config import settings
 from app.db import get_async_session
 from app.models.user import User as UserModel
-from app.exceptions import InvalidCredentialsException, InvalidResetTokenException, UserAlreadyExistsException, UserNotFoundException
+from app.exceptions import (
+    InvalidCredentialsException, 
+    InvalidResetTokenException, 
+    UserAlreadyExistsException, 
+    UserNotFoundException,
+    InvalidRefreshTokenException,
+    RefreshTokenNotProvidedException,
+    PasswordResetTokenInvalidException
+    )
 from app.utils.auth import (
     get_current_user,
     hash_password, 
@@ -189,7 +197,7 @@ async def reset_password(
     
     if not user_id:
         logger.warning(f"Invalid or expired password reset token used: {data.token}")
-        raise InvalidResetTokenException()
+        raise PasswordResetTokenInvalidException(token=data.token)
         
     query = select(UserModel).where(UserModel.id == user_id)
     result = await session.execute(query)
@@ -216,12 +224,12 @@ async def refresh_token(
 ):
     if not refresh_token:
         logger.warning("Refresh token not provided in cookie")
-        raise InvalidResetTokenException()
+        raise RefreshTokenNotProvidedException()
     
     payload = verify_token(refresh_token)
     if not payload:
         logger.warning("Invalid refresh token provided")
-        raise InvalidResetTokenException()
+        raise InvalidRefreshTokenException()
         
     user_id_str = payload.get("sub")
 
@@ -232,7 +240,7 @@ async def refresh_token(
         response.delete_cookie("access_token", path="/")
         response.delete_cookie("refresh_token", path="/")
         logger.warning(f"Invalid refresh token for user ID {user_id_str}")
-        raise InvalidResetTokenException()
+        raise InvalidRefreshTokenException(user_id=user_id_str)
     
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     new_access_token = create_access_token(data={"sub": str(user.id)}, expires_delta=access_token_expires)

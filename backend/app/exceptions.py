@@ -57,6 +57,35 @@ class InvalidResetTokenException(AppException):
     detail = "Reset token has expired or is invalid."
 
 
+class RefreshTokenNotProvidedException(AppException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Refresh token standard cookie is missing."
+
+
+class InvalidRefreshTokenException(AppException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+
+    def __init__(self, user_id: str | None = None):
+        self.user_id = user_id
+        if user_id:
+            detail = f"Invalid refresh token for user ID '{user_id}'."
+        else:
+            detail = "Invalid or expired refresh token provided."
+        super().__init__(detail=detail)
+
+
+class PasswordResetTokenInvalidException(AppException):
+    status_code = status.HTTP_400_BAD_REQUEST
+
+    def __init__(self, token: str | None = None):
+        self.token = token
+        if token:
+            detail = f"Invalid or expired password reset token: '{token}'."
+        else:
+            detail = "Password reset token is invalid or has expired."
+        super().__init__(detail=detail)
+
+
 class InvalidImageExtensionException(AppException):
     status_code = status.HTTP_400_BAD_REQUEST
     detail = "Only JPG, PNG and WEBP images are allowed."
