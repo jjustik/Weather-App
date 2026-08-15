@@ -12,7 +12,7 @@ from app.exceptions import ExternalAPIError
 from app.utils.auth import get_current_user, get_optional_user
 from app.models.user import User as UserModel
 from app.logger import logger
-from app.utils.weather_utils import get_country_code, fix_encoding
+from app.utils.weather_utils import clean_text, get_country_code, fix_encoding
 
 router = APIRouter(prefix="/weather", tags=["Weather"])
 
@@ -92,9 +92,9 @@ async def search_city(q: str):
 
     for city in cities:
         city.pop('url', None)
-        city["name"] = fix_encoding(city.get("name"))
-        city["region"] = fix_encoding(city.get("region"))
-        city["country"] = fix_encoding(city.get("country"))
+        city["name"] = clean_text(city.get("name"))
+        city["region"] = clean_text(city.get("region"))
+        city["country"] = clean_text(city.get("country"))
 
         code = get_country_code(city.get("country"))
         city["country_code"] = code

@@ -2,7 +2,7 @@ from datetime import timedelta
 import secrets
 from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Cookie, Depends, HTTPException, Request, Response, status
+from fastapi import APIRouter, BackgroundTasks, Cookie, Depends, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,7 +27,9 @@ from app.utils.auth import (
     create_access_token, 
     create_refresh_token,
     token_hash,
-    verify_token
+    verify_token,
+    set_access_token_cookie,
+    set_refresh_token_cookie
 )
 from app.schemas.users import (
     ForgotPasswordRequest,
@@ -84,25 +86,8 @@ async def register_user(
 
     is_production = check_is_production(request)
 
-    response.set_cookie(
-        key="access_token",
-        value=access_token,
-        httponly=True,
-        secure=is_production,
-        samesite="none" if is_production else "lax",
-        max_age=settings.access_token_expire_minutes * 60,
-        path="/"
-    )
-    
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        httponly=True,
-        secure=is_production,
-        samesite="none" if is_production else "lax",
-        max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/"
-    )
+    await set_access_token_cookie(response, access_token, is_production)
+    await set_refresh_token_cookie(response, refresh_token, is_production)
 
     return {
         "user": {
@@ -136,25 +121,8 @@ async def login_user(
 
     is_production = check_is_production(request)
 
-    response.set_cookie(
-        key="access_token",
-        value=access_token,
-        httponly=True,
-        secure=is_production,
-        samesite="none" if is_production else "lax",
-        max_age=settings.access_token_expire_minutes * 60,
-        path="/"
-    )
-    
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        httponly=True,
-        secure=is_production,
-        samesite="none" if is_production else "lax",
-        max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/"
-    )
+    await set_access_token_cookie(response, access_token, is_production)
+    await set_refresh_token_cookie(response, refresh_token, is_production)
     
     return {"Message": "Logged in"}
 
@@ -250,25 +218,8 @@ async def refresh_token(
 
     is_production = check_is_production(request)
 
-    response.set_cookie(
-        key="access_token",
-        value=new_access_token,
-        httponly=True,
-        secure=is_production,
-        samesite="none" if is_production else "lax",
-        max_age=settings.access_token_expire_minutes * 60,
-        path="/"
-    )
-
-    response.set_cookie(
-        key="refresh_token",
-        value=new_refresh_token,
-        httponly=True,
-        secure=is_production,
-        samesite="none" if is_production else "lax",
-        max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
-        path="/"
-    )
+    await set_access_token_cookie(response, new_access_token, is_production)
+    await set_refresh_token_cookie(response, new_refresh_token, is_production)
 
     return {"message": "Tokens refreshed successfully."}
 

@@ -1,7 +1,7 @@
 import aiohttp
 import os
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, UploadFile, File
 from loguru import logger
 from pathlib import Path
 from pydantic import EmailStr
@@ -15,8 +15,8 @@ from app.db import get_async_session
 from app.exceptions import(
     ImageTooLargeException, 
     InvalidImageExtensionException, 
-    UserAlreadyExistsException, 
-    InvalidEmailException)
+    UserAlreadyExistsException
+    )
 from app.utils.auth import get_current_user
 from app.models.user import User as UserModel
 from app.schemas.city import CityUpdate

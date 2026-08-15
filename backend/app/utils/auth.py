@@ -1,10 +1,12 @@
+from urllib import response
+
 import jwt
 import hashlib
 from typing import Annotated
 from uuid import UUID
 from datetime import datetime, timedelta, timezone
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Cookie
+from fastapi import Cookie, Response
 from jwt.exceptions import InvalidTokenError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -125,4 +127,27 @@ async def get_optional_user(
         return await get_current_user(access_token=access_token, session=session)
     except HTTPException:
         return None
-    
+
+
+async def set_access_token_cookie(response: Response, access_token: str, is_production: bool):
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=is_production,
+        samesite="none" if is_production else "lax",
+        max_age=settings.access_token_expire_minutes * 60,
+        path="/"
+    )
+
+
+async def set_refresh_token_cookie(response: Response, refresh_token: str, is_production: bool):
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=is_production,
+        samesite="none" if is_production else "lax",
+        max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
+        path="/"
+    )
