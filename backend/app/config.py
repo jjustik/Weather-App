@@ -17,6 +17,13 @@ class Settings(BaseSettings):
     api_key: str
     SearchAPIKey: str
     validation_api_key: str
+    r2_account_id: str
+    r2_access_key: str
+    r2_secret_key: str
+    r2_bucket_name: str
+    r2_public_custom_domain: str
+    r2_endpoint_url: str
+
 
     model_config = SettingsConfigDict(env_file=env_path, env_file_encoding="utf-8", extra="ignore")
 

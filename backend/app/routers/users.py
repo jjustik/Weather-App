@@ -1,5 +1,4 @@
 import aiohttp
-import os
 
 from fastapi import APIRouter, Depends, UploadFile, File
 from loguru import logger
@@ -9,17 +8,20 @@ from uuid import uuid4
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import update, select
 from typing import Annotated, Optional
+from urllib.parse import urlparse
 
 from app.config import settings
 from app.db import get_async_session
 from app.exceptions import(
     ImageTooLargeException, 
     InvalidImageExtensionException, 
-    UserAlreadyExistsException
+    UserAlreadyExistsException,
+    AvatarUploadFailedException
     )
 from app.utils.auth import get_current_user
 from app.models.user import User as UserModel
 from app.schemas.city import CityUpdate
+from app.utils.avatars import upload_file_to_r2, delete_file_from_r2
 
 MEDIA_DIR = Path("")
 AVATARS_DIR = Path(__file__).resolve().parent.parent.parent.parent / "frontend" / "avatars" / "users"
@@ -64,14 +66,14 @@ async def upload_avatar(
         logger.warning(f"User {current_user.id} tried to upload an avatar that is too large: {len(contents)} bytes")
         raise ImageTooLargeException()
 
-    filename = f"{current_user.id}_{uuid4().hex}{extension}"
-    file_path = AVATARS_DIR / filename
+    filename = f"avatars/{current_user.id}_{uuid4().hex}{extension}"
+    avatar_url = await upload_file_to_r2(
+        file_bytes=contents,
+        filename=filename,
+        content_type=avatar.content_type
+    )
 
-    AVATARS_DIR.mkdir(parents=True, exist_ok=True)
-
-    file_path.write_bytes(contents)
-
-    current_user.avatar_url = f"/avatars/users/{filename}"
+    current_user.avatar_url = avatar_url
 
     await session.commit()
     await session.refresh(current_user)
@@ -141,11 +143,14 @@ async def delete_avatar(
 ):
 
     if current_user.avatar_url:
-        filename = Path(current_user.avatar_url).name
-        file_path = AVATARS_DIR / filename
+        parsed_url = urlparse(current_user.avatar_url)
+        object_key = parsed_url.path.lstrip("/")
 
-        if file_path.exists():
-            file_path.unlink()
+        try:
+            await delete_file_from_r2(object_key)
+        except Exception as e:
+            logger.error(f"Failed to delete avatar from R2 for user {current_user.id}: {e}")
+            raise AvatarUploadFailedException(reason=str(e))
 
     current_user.avatar_url = None
 

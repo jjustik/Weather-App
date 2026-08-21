@@ -103,3 +103,10 @@ class InvalidEmailException(AppException):
     
     def __init__(self, email: str):
         super().__init__(detail=f"The email '{email}' is invalid or does not exist.")
+
+
+class AvatarUploadFailedException(AppException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    
+    def __init__(self, reason: str):
+        super().__init__(detail=f"Avatar upload failed: {reason}")
