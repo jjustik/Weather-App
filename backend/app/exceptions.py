@@ -110,3 +110,15 @@ class AvatarUploadFailedException(AppException):
     
     def __init__(self, reason: str):
         super().__init__(detail=f"Avatar upload failed: {reason}")
+
+
+class InvalidStripeSignatureException(AppException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Invalid Stripe webhook signature"
+
+
+class InvalidCoinPackageException(AppException):
+    status_code = status.HTTP_400_BAD_REQUEST
+
+    def __init__(self, package_id: str):
+        super().__init__(detail=f"The coin package '{package_id}' does not exist.")

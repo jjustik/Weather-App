@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from app.db import create_db_and_tables
-from app.routers import auth, users, weather 
+from app.routers import auth, users, weather, payment
 from app.logger import setup_logger, logger
 from app.exceptions import AppException
 
@@ -38,6 +38,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(weather.router)
+app.include_router(payment.router)
 
 @app.get("/")
 async def root():

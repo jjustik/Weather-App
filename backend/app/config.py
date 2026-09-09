@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     r2_bucket_name: str
     r2_public_custom_domain: str
     r2_endpoint_url: str
+    stripe_secret_key: str
+    stripe_webhook_secret: str
+    stripe_price_coins_1000: str
+    stripe_price_coins_5000: str
+    stripe_price_coins_10000: str
 
 
     model_config = SettingsConfigDict(env_file=env_path, env_file_encoding="utf-8", extra="ignore")
